@@ -1,0 +1,7 @@
+[build]
+  functions = "netlify/functions"
+
+[functions]
+  # Esto le dice a Netlify que meta el contenido de la carpeta "galeria"
+  # dentro de la función, para que pueda leer qué fotos hay.
+  included_files = ["galeria/**"]

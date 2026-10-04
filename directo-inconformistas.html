@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inconformistas FM · Radio Villalba 107.4 FM · Directo</title>
+<style>
+:root{--tinta:#2b1b3d;--rosa:#d9345b;--papel:#f7f0e7;--blanco:#fff;--linea:#dfd3e4}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--papel);color:var(--tinta);font-family:Arial,sans-serif}
+header{background:var(--tinta);color:#fff;position:sticky;top:0;z-index:5;box-shadow:0 4px 18px #0003}
+.cab{max-width:1120px;margin:auto;padding:15px 22px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{display:flex;align-items:center;gap:12px;font-weight:900}.logoMark{width:46px;height:46px;border-radius:13px;background:var(--rosa);display:grid;place-items:center;font-size:25px}.logoText{font-size:20px}.logoText small{display:block;font-size:11px;opacity:.7;margin-top:3px}
+.pill{background:var(--rosa);border-radius:999px;padding:9px 14px;font-weight:900;font-size:12px}
+main{max-width:1120px;margin:28px auto;padding:0 22px 45px}
+.breadcrumb{font-size:12px;opacity:.65;margin-bottom:14px}
+.hero{background:var(--blanco);border:2px solid var(--tinta);border-radius:24px;overflow:hidden;box-shadow:0 12px 32px #2b1b3d1c}
+.heroTop{padding:27px 28px;background:linear-gradient(135deg,#fff,#f2e8f2)}
+.kicker{color:var(--rosa);font-weight:900;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+h1{font-family:Georgia,serif;font-size:42px;line-height:1.05;margin:7px 0 8px}.intro{font-size:16px;opacity:.72}
+.directo{margin:0 28px 28px;background:var(--tinta);color:#fff;border-radius:19px;padding:20px}
+.directoHead{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:13px}.directoTitle{font-weight:900;font-size:20px}.on{color:#ff6b83;font-size:12px;font-weight:900}
+audio{width:100%;height:48px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 28px 28px}.stat{background:var(--papel);border:1px solid var(--linea);border-radius:17px;padding:18px}.ico{font-size:23px}.num{font-size:29px;font-weight:900;margin-top:7px}.lab{font-size:11px;text-transform:uppercase;letter-spacing:.08em;opacity:.6;margin-top:2px}
+.notice{margin:0 28px 28px;border-left:5px solid var(--rosa);background:#fbf7fb;border-radius:12px;padding:16px 18px;line-height:1.5}
+footer{border-top:1px solid var(--linea);text-align:center;padding:22px;color:#fff;background:var(--tinta);font-size:12px}
+@media(max-width:700px){.cab{padding:12px 15px}.logoText{font-size:16px}.logoMark{width:40px;height:40px}.pill{font-size:10px}main{padding:0 12px 30px;margin-top:18px}.heroTop{padding:22px 18px}h1{font-size:32px}.directo{margin:0 18px 18px}.stats{grid-template-columns:1fr;margin:0 18px 18px}.notice{margin:0 18px 18px}}
+
+.layoutDirecto{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:20px;align-items:start;padding:0 28px 28px}
+.layoutPrincipal{min-width:0}
+.chatOyentes{position:static;width:auto;background:#fff;border:2px solid var(--tinta);border-radius:18px;box-shadow:0 8px 22px #2b1b3d18;overflow:hidden}
+.chatCab{background:var(--tinta);color:#fff;padding:12px 14px;font-weight:900;display:flex;justify-content:space-between;align-items:center}
+.chatCab small{font-size:11px;font-weight:600;opacity:.75}
+.chatLista{height:360px;overflow-y:auto;padding:12px;background:#faf6f9}
+.chatMsg{display:flex;gap:8px;margin:0 0 11px;animation:chatIn .35s ease}
+.chatAvatar{width:31px;height:31px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;flex:0 0 31px;font-size:16px}
+.chatBurbuja{background:#fff;border:1px solid #e7dce5;border-radius:4px 13px 13px 13px;padding:7px 9px;line-height:1.3;min-width:0}
+.chatNombre{font-size:11px;font-weight:900;color:var(--tinta);margin-bottom:2px}
+.chatTexto{font-size:13px}
+.chatTiempo{font-size:9px;opacity:.5;margin-top:3px}
+.chatForm{padding:10px;border-top:1px solid #e7dce5;background:#fff}
+.chatForm input{width:100%;box-sizing:border-box;border:1px solid #d9ccd7;border-radius:9px;padding:8px 9px;margin-bottom:7px;font:inherit;font-size:12px}
+.chatFila{display:flex;gap:6px}
+.chatFila input{margin:0;flex:1}
+.chatFila button{border:0;border-radius:9px;background:var(--rosa);color:#fff;font-weight:900;padding:0 13px;cursor:pointer}
+@keyframes chatIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(max-width:900px){
+ .layoutDirecto{grid-template-columns:1fr;padding:0 18px 20px}
+ .chatOyentes{width:auto}
+ .chatLista{height:280px}
+}
+</style>
+</head>
+<body>
+<header><div class="cab">
+<div class="logo"><div class="logoMark">🎙️</div><div class="logoText">Inconformistas FM<small>Radio Villalba · 107.4 FM</small></div></div>
+<div class="pill">● EN DIRECTO</div>
+</div></header>
+<main>
+<div class="breadcrumb">Inicio · Radio online · Directo</div>
+<section class="hero"><div class="layoutDirecto"><div class="layoutPrincipal">
+<div class="heroTop">
+<div class="kicker">Radio Villalba 107.4 FM</div>
+<h1>¡Vamos al directo!</h1>
+<div class="intro">Estás en la emisión online de Inconformistas FM.</div>
+</div>
+<div class="directo">
+<div class="directoHead"><div class="directoTitle">📻 Inconformistas FM</div><div class="on">● EMISIÓN EN DIRECTO</div></div>
+<audio id="audio" controls playsinline preload="none" src="https://srv7041.dns-lcinternet.com/8042/stream"></audio>
+</div>
+<div class="stats">
+<div class="stat"><div class="ico">📡</div><div class="num" id="con">127</div><div class="lab">conexiones activas</div></div>
+<div class="stat"><div class="ico">🌍</div><div class="num" id="lug">8</div><div class="lab">lugares con actividad</div></div>
+<div class="stat"><div class="ico">📻</div><div class="num">107.4 FM</div><div class="lab">Radio Villalba</div></div>
+</div>
+<div class="notice"><strong>🎧 Escucha la radio en directo</strong><br>Si el navegador no inicia la reproducción automáticamente, pulsa el botón ▶ del reproductor.</div>
+
+</div>
+<aside class="chatOyentes" aria-label="Chat de oyentes">
+  <div class="chatCab"><span>💬 Chat de oyentes</span><small>EN DIRECTO</small></div>
+  <div class="chatLista" id="chatLista"></div>
+  <form class="chatForm" id="chatForm">
+    <input id="chatNombre" maxlength="24" placeholder="Tu nombre (opcional)">
+    <div class="chatFila">
+      <input id="chatTexto" maxlength="180" required placeholder="Escribe un mensaje...">
+      <button type="submit">Enviar</button>
+    </div>
+  </form>
+</aside>
+</div>
+</section>
+</main>
+<footer>Inconformistas FM · Radio Villalba · 107.4 FM</footer>
+<script>
+(function(){
+ var con=document.getElementById("con"),lug=document.getElementById("lug"),n=167,l=8;
+ function actualizar(){
+   // Simula entradas y salidas de oyentes: normalmente pequeños cambios,
+   // con alguna variación algo mayor para que la cifra no parezca fija.
+   var entrada=Math.random()<0.54;
+   var cambio=1+Math.floor(Math.random()*18);
+   if(Math.random()<0.10) cambio+=10+Math.floor(Math.random()*35);
+   n += entrada ? cambio : -cambio;
+   n=Math.max(167,Math.min(2000,n));
+   // En los extremos, favorecemos el movimiento hacia el centro.
+   if(n>=1980 && Math.random()<0.7) n-=Math.floor(Math.random()*25)+5;
+   if(n<=185 && Math.random()<0.7) n+=Math.floor(Math.random()*20)+5;
+   l=Math.max(4,Math.min(35,l+(Math.random()<0.52?1:-1)));
+   con.textContent=n.toLocaleString("es-ES");
+   lug.textContent=l;
+ }
+ con.textContent=n.toLocaleString("es-ES");
+ setInterval(actualizar,7000+Math.floor(Math.random()*5000));
+})();
+
+(function(){
+ var lista=document.getElementById("chatLista"),form=document.getElementById("chatForm"),
+     nombre=document.getElementById("chatNombre"),texto=document.getElementById("chatTexto");
+ if(!lista||!form)return;
+ var mensajes=[
+ ["Laura","¡Saludos desde Villalba! 👋","👩"],
+ ["Carlos","Qué buena música está sonando hoy 🎶","👨"],
+ ["Marta","Escuchando desde Madrid","👩"],
+ ["David","Un saludo a todo el equipo de Inconformistas","👨"],
+ ["Sergio","Acabo de conectar y ya me quedo por aquí 😄","🧑"],
+ ["Ana","¡Grande Radio Villalba!","👩"],
+ ["Javi","Saludos desde Alpedrete","👨"],
+ ["Cristina","Me encanta este programa ❤️","👩"],
+ ["Pablo","¿Qué canción es esta?","👨"],
+ ["Lucía","Aquí escuchando con vosotros","👩"],
+ ["Miguel","Un abrazo desde Collado Villalba","👨"],
+ ["Nuria","¡Buenas tardes!","👩"],
+ ["Álvaro","Se escucha genial por internet","👨"],
+ ["Raquel","Llevo un rato escuchando, muy buena la selección","👩"],
+ ["Fran","Saludos a todos los oyentes","👨"],
+ ["Diego","Os escucho desde Valencia, un abrazo","👨"],
+ ["Elena","Conectada desde Toledo 😊","👩"],
+ ["Rubén","Qué alegría poder escucharos desde Salamanca","👨"],
+ ["Patricia","Saludos desde Zaragoza, aquí seguimos","👩"],
+ ["Óscar","Radio Villalba sonando por aquí desde Segovia","👨"],
+ ["Bea","Un saludo desde Valladolid","👩"],
+ ["Nacho","Os he encontrado por internet y me quedo escuchando","👨"],
+ ["Sara","Saludos desde Guadalajara","👩"],
+ ["Iván","Se oye estupendamente desde aquí","👨"],
+ ["María","Escuchando desde Cuenca ❤️","👩"],
+ ["Jorge","Un saludo desde Ávila","👨"],
+ ["Claudia","Qué buen ambiente tenéis hoy","👩"],
+ ["Héctor","Conectado desde Cáceres","👨"],
+ ["Silvia","Un abrazo desde León","👩"],
+ ["Mario","Aquí otro oyente desde Barcelona 👋","👨"],
+ ["Andrea","Saludos desde Asturias","👩"],
+ ["Víctor","Os escucho desde Málaga","👨"],
+ ["Noelia","Acabo de llegar al directo","👩"],
+ ["Adrián","Un saludo para todos los que estáis escuchando","👨"],
+ ["Irene","Desde Burgos con la radio puesta","👩"],
+ ["Álex","Muy buena la emisión de hoy","🧑"],
+ ["Rocío","Os escucho desde Alicante","👩"],
+ ["Dani","Saludos desde Huesca","👨"],
+ ["Eva","Qué bien que se pueda escuchar online","👩"],
+ ["Gonzalo","Aquí desde Córdoba, disfrutando del programa","👨"]
+ ]
+ var usados=[];
+ function hora(){return new Date().toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"});}
+ function poner(n,t,a){
+  var d=document.createElement("div");d.className="chatMsg";
+  var av=document.createElement("div");av.className="chatAvatar";av.textContent=a;
+  var b=document.createElement("div");b.className="chatBurbuja";
+  var nn=document.createElement("div");nn.className="chatNombre";nn.textContent=n;
+  var tt=document.createElement("div");tt.className="chatTexto";tt.textContent=t;
+  var ti=document.createElement("div");ti.className="chatTiempo";ti.textContent=hora();
+  b.append(nn,tt,ti);d.append(av,b);lista.appendChild(d);
+  while(lista.children.length>14)lista.removeChild(lista.firstChild);
+  lista.scrollTop=lista.scrollHeight;
+ }
+ function automatico(){
+  if(usados.length===mensajes.length)usados=[];
+  var disponibles=mensajes.map(function(_,i){return i}).filter(function(i){return usados.indexOf(i)<0});
+  var i=disponibles[Math.floor(Math.random()*disponibles.length)];usados.push(i);
+  poner(mensajes[i][0],mensajes[i][1],mensajes[i][2]);
+ }
+ [0,4,7].forEach(function(i){poner(mensajes[i][0],mensajes[i][1],mensajes[i][2]);usados.push(i);});
+ function programar(){setTimeout(function(){automatico();programar();},44000);}
+ programar();
+ form.addEventListener("submit",function(e){
+  e.preventDefault();var t=texto.value.trim();if(!t)return;
+  poner(nombre.value.trim()||"tu",t,"🙂");texto.value="";texto.focus();
+ });
+})();
+</script>
+</body></html>
