@@ -631,7 +631,7 @@ var MAX_RECURSOS=50;
 
 /* [nº, título, enlace directo de iVoox, audio antiguo] */
 var P=[
-[276,"Esther Williams","https://go.ivoox.com/rf/181576456"],
+[276,"Esther Williams","https://go.ivoox.com/rf/181576456",null,null,"https://open.spotify.com/episode/1UjzpZ6bX7kRBqYuyj9o9Q"],
   [275,"Opinión del ataque de EEUU a Venezuela",null,null,"https://inconformistasfm.blogspot.com/2026/01/opinion-del-ataque-de-eeuu-venezuela.html"],
 [274,"Despertar la creatividad desde dentro — Entrevista con Tamara Chenel de Bambalinas","https://www.ivoox.com/tamara-chenel-bambalinas-inconformistas-fm-audios-mp3_rf_158332358_1.html",null,"https://inconformistasfm.blogspot.com/2025/09/despertar-la-creatividad-desde-dentro.html"],
 [273,"Luback"],
@@ -1114,6 +1114,7 @@ function pintarProgramas(f){
     var chip=directo?'<a class="play" href="'+esc(directo)+'" target="_blank" rel="noopener">▶ iVoox</a>'
                     :'<a class="play canal" href="'+IVOOX+'" target="_blank" rel="noopener">Ver en iVoox</a>';
     var extra=viejo?' <a class="play canal" href="'+esc(viejo)+'" target="_blank" rel="noopener">Archivo</a>':'';
+    if(p[5]) extra+=' <a class="play canal" href="'+esc(p[5])+'" target="_blank" rel="noopener">Spotify</a>';
     return '<li><span class="n">'+p[0]+'</span><span class="t"><a class="blog-programa" href="'+esc(blogDest)+'" target="_blank" rel="noopener" title="Abrir entrada en el blog">'+esc(p[1])+'</a></span>'+chip+extra+'</li>';
   }).join("");
 }
@@ -1246,12 +1247,12 @@ window.iniciarRadio=function(){
   if(p&&p.catch){p.catch(function(){if(estadoRadio)estadoRadio.textContent="Radio Villalba · 107.4 FM · Pulsa ▶ para escuchar";});}
   return false;
 }
-window.cerrarRadio=function(){
+window.cerrarRadio=window.cerrarRadio||function(){
   var panel=document.getElementById("radioPersistente");
   var audio=document.getElementById("radioAudio");
   if(audio){audio.pause();audio.removeAttribute("src");audio.load();}
   if(panel) panel.classList.remove("activo");
-}
+};
 
 // Reproductor flotante: arrastrable con ratón o dedo y conserva su posición.
 (function(){
