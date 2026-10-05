@@ -1124,47 +1124,21 @@ function montarFotosPrograma(){
   var numero=params.get('programa')||'';
   var estado=document.getElementById('estadoFotos'), gal=document.getElementById('galeriaPrograma');
   if(!estado||!gal||!numero)return;
-
   estado.textContent='Cargando las fotos del programa…';
-
-  if(String(numero)!=='276'){
-    estado.textContent='Todavía no hay fotos publicadas para este programa.';
-    return;
-  }
-
-  /* GitHub: se usa el mismo enlace ?raw=true que funciona al abrir
-     "Download raw file". Así no dependemos de raw.githubusercontent.com. */
-  var encontrados=[];
-  var nombresFotos=[];
-  for(var i=1;i<=20;i++) nombresFotos.push('foto'+i+'.jpg');
-
-  var pendientes=nombresFotos.length;
-
+  if(String(numero)!=='276'){ estado.textContent='Todavía no hay fotos publicadas para este programa.'; return; }
+  var encontrados=[], pendientes=20;
   function finalizar(){
-    pendientes--;
-    if(pendientes!==0)return;
+    pendientes--; if(pendientes!==0)return;
     encontrados.sort(function(a,b){return a.numero-b.numero;});
-    if(!encontrados.length){
-      estado.textContent='Todavía no hay fotos publicadas para este programa.';
-      return;
-    }
+    if(!encontrados.length){estado.textContent='Todavía no hay fotos publicadas para este programa.';return;}
     estado.textContent=encontrados.length+(encontrados.length===1?' foto publicada.':' fotos publicadas.');
-    gal.innerHTML=encontrados.map(function(x){
-      return '<a href="'+esc(x.src)+'" target="_blank" rel="noopener" style="display:block"><img src="'+esc(x.src)+'" alt="Foto del programa '+esc(numero)+'" loading="lazy" style="width:100%;height:220px;object-fit:cover;border-radius:16px;border:3px solid var(--tinta);box-shadow:var(--dura);display:block"></a>';
-    }).join('');
+    gal.innerHTML=encontrados.map(function(x){return '<a href="'+esc(x.src)+'" target="_blank" rel="noopener" style="display:block"><img src="'+esc(x.src)+'" alt="Foto del programa '+esc(numero)+'" loading="lazy" style="width:100%;height:220px;object-fit:cover;border-radius:16px;border:3px solid var(--tinta);box-shadow:var(--dura);display:block"></a>';}).join('');
   }
-
-  nombresFotos.forEach(function(nombre,indice){
-    var numeroFoto=indice+1;
-    var src='https://github.com/inconformistasfm/inconformistasfmweb/blob/main/fotos-programas/276/'+nombre+'?raw=true';
-    var img=new Image();
-    img.onload=function(){
-      encontrados.push({numero:numeroFoto,src:src});
-      finalizar();
-    };
-    img.onerror=function(){finalizar();};
-    img.src=src;
-  });
+  for(var n=1;n<=20;n++){(function(numeroFoto){
+    var src='fotos-programas/276/foto'+numeroFoto+'.jpg'; var img=new Image();
+    img.onload=function(){encontrados.push({numero:numeroFoto,src:src});finalizar();};
+    img.onerror=function(){finalizar();}; img.src=src;
+  })(n);}
 }
 
 function pintarProgramas(f){
