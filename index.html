@@ -1150,15 +1150,16 @@ function montarFotosPrograma(){
     return;
   }
 
-  for(var n=1;n<=50;n++){
-    (function(n){
-      var src='https://github.com/inconformistasfm/inconformistasfmweb/raw/refs/heads/main/fotos-programas/276/foto'+n+'.jpg';
-      var img=new Image();
-      img.onload=function(){encontrados.push({numero:n,src:src});finalizar();};
-      img.onerror=function(){finalizar();};
-      img.src=src;
-    })(n);
-  }
+  var nombresFotos=['foto1.jpg','foto2.jpg','foto3.jpg','foto4.jpg','foto5.jpg','foto6.jpg','foto7.jpg','foto8.jpg','foto9.jpg','foto10.jpg','foto11.jpg','foto12.jpg','foto13.jpg','foto14.jpg','foto15.jpg','foto16.jpg','foto17.jpg','foto18.jpg','foto19.jpg','foto20.jpg'];
+  pendientes=nombresFotos.length;
+  nombresFotos.forEach(function(nombre,indice){
+    var numeroFoto=indice+1;
+    var src='https://raw.githubusercontent.com/inconformistasfm/inconformistasfmweb/main/fotos-programas/276/'+nombre;
+    var img=new Image();
+    img.onload=function(){encontrados.push({numero:numeroFoto,src:src});finalizar();};
+    img.onerror=function(){finalizar();};
+    img.src=src;
+  });
 }
 
 function pintarProgramas(f){
