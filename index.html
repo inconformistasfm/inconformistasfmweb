@@ -1154,7 +1154,7 @@ function montarFotosPrograma(){
   pendientes=nombresFotos.length;
   nombresFotos.forEach(function(nombre,indice){
     var numeroFoto=indice+1;
-    var src='https://raw.githubusercontent.com/inconformistasfm/inconformistasfmweb/main/fotos-programas/276/'+nombre;
+    var src='https://github.com/inconformistasfm/inconformistasfmweb/blob/main/fotos-programas/276/'+nombre+'?raw=true';
     var img=new Image();
     img.onload=function(){encontrados.push({numero:numeroFoto,src:src});finalizar();};
     img.onerror=function(){finalizar();};
