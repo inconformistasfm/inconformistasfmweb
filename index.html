@@ -1125,11 +1125,20 @@ function montarFotosPrograma(){
   var estado=document.getElementById('estadoFotos'), gal=document.getElementById('galeriaPrograma');
   if(!estado||!gal||!numero)return;
 
-  /* Solo fotos del programa. GitHub confirma actualmente foto1.jpg, foto2.jpg y foto3.jpg.
-     Dejamos preparado el mismo sistema para futuras fotos (foto4.jpg, foto5.jpg...). */
   estado.textContent='Cargando las fotos del programa…';
+
+  if(String(numero)!=='276'){
+    estado.textContent='Todavía no hay fotos publicadas para este programa.';
+    return;
+  }
+
+  /* GitHub: se usa el mismo enlace ?raw=true que funciona al abrir
+     "Download raw file". Así no dependemos de raw.githubusercontent.com. */
   var encontrados=[];
-  var pendientes=50;
+  var nombresFotos=[];
+  for(var i=1;i<=20;i++) nombresFotos.push('foto'+i+'.jpg');
+
+  var pendientes=nombresFotos.length;
 
   function finalizar(){
     pendientes--;
@@ -1145,18 +1154,14 @@ function montarFotosPrograma(){
     }).join('');
   }
 
-  if(String(numero)!=='276'){
-    estado.textContent='Todavía no hay fotos publicadas para este programa.';
-    return;
-  }
-
-  var nombresFotos=['foto1.jpg','foto2.jpg','foto3.jpg','foto4.jpg','foto5.jpg','foto6.jpg','foto7.jpg','foto8.jpg','foto9.jpg','foto10.jpg','foto11.jpg','foto12.jpg','foto13.jpg','foto14.jpg','foto15.jpg','foto16.jpg','foto17.jpg','foto18.jpg','foto19.jpg','foto20.jpg'];
-  pendientes=nombresFotos.length;
   nombresFotos.forEach(function(nombre,indice){
     var numeroFoto=indice+1;
     var src='https://github.com/inconformistasfm/inconformistasfmweb/blob/main/fotos-programas/276/'+nombre+'?raw=true';
     var img=new Image();
-    img.onload=function(){encontrados.push({numero:numeroFoto,src:src});finalizar();};
+    img.onload=function(){
+      encontrados.push({numero:numeroFoto,src:src});
+      finalizar();
+    };
     img.onerror=function(){finalizar();};
     img.src=src;
   });
