@@ -567,6 +567,14 @@
 
   /* ---------- nombre del programa en la portada ---------- */
   .marca-nombre{display:inline-block;font-family:"Fraunces",Georgia,serif;font-weight:800;font-size:clamp(17px,2vw,21px);line-height:1.2;color:var(--tinta);background:var(--sol);border:3px solid var(--tinta);border-radius:99px;box-shadow:3px 3px 0 var(--tinta);padding:6px 18px;margin:0 0 18px;transform:rotate(1.5deg);max-width:none}
+
+/* Reproductor iVoox en ventana */
+.ivoox-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.72)}
+.ivoox-modal.abierto{display:flex}
+.ivoox-caja{position:relative;width:min(720px,100%);background:#fff;border:3px solid var(--tinta);border-radius:20px;padding:48px 14px 14px;box-shadow:0 12px 35px rgba(0,0,0,.35)}
+.ivoox-cerrar{position:absolute;right:10px;top:8px;border:2px solid var(--tinta);background:var(--sol);color:var(--tinta);border-radius:999px;width:38px;height:38px;font-size:22px;font-weight:900;cursor:pointer;line-height:1}
+.ivoox-player{width:100%;height:190px;border:0;display:block}
+@media(max-width:600px){.ivoox-modal{padding:10px}.ivoox-caja{padding:48px 8px 8px;border-radius:16px}.ivoox-player{height:180px}}
 </style>
 
 
@@ -622,6 +630,13 @@
   </div>
 </footer>
 
+
+<div id="ivooxModal" class="ivoox-modal" aria-hidden="true" onclick="cerrarIvoox(event)">
+  <div class="ivoox-caja" role="dialog" aria-modal="true" aria-label="Reproductor iVoox" onclick="event.stopPropagation();">
+    <button class="ivoox-cerrar" type="button" aria-label="Cerrar reproductor" onclick="cerrarIvoox()">×</button>
+    <iframe id="ivooxPlayer" class="ivoox-player" src="about:blank" title="Reproductor iVoox" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+  </div>
+</div>
 <script>
 var EMISORA="https://srv7041.dns-lcinternet.com/8042/stream";
 var PLAYER_RADIO="http://player.lcinternet.es/v9/cc439_id695/";
@@ -1154,6 +1169,28 @@ function montarFotosPrograma(){
   });
 }
 
+
+function abrirIvoox(url){
+  if(!url) return false;
+  var id=(url.match(/(?:rf_|rf\/)(\d+)/i)||[])[1];
+  if(!id){ window.open(url,"_blank","noopener"); return false; }
+  var modal=document.getElementById("ivooxModal"),player=document.getElementById("ivooxPlayer");
+  if(!modal||!player){ window.open(url,"_blank","noopener"); return false; }
+  player.src="https://www.ivoox.com/player_ej_"+id+"_6_1.html";
+  modal.classList.add("abierto");
+  modal.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";
+  return false;
+}
+function cerrarIvoox(ev){
+  if(ev && ev.target!==ev.currentTarget) return;
+  var modal=document.getElementById("ivooxModal"),player=document.getElementById("ivooxPlayer");
+  if(modal) { modal.classList.remove("abierto"); modal.setAttribute("aria-hidden","true"); }
+  if(player) player.src="about:blank";
+  document.body.style.overflow="";
+}
+document.addEventListener("keydown",function(e){if(e.key==="Escape") cerrarIvoox();});
+
 function pintarProgramas(f){
   var lista=document.getElementById("lista"),cont=document.getElementById("contador");
   if(!lista) return;
@@ -1168,7 +1205,7 @@ function pintarProgramas(f){
   if(!res.length){lista.innerHTML='<li class="vacio">No hay ningún programa con ese nombre. Prueba con otra palabra.</li>';return;}
   lista.innerHTML=res.map(function(p){
     var directo=p[2], viejo=p[3], blogDest=p[4] || enlaceBlogPrograma(p[1]);
-    var chip=directo?'<a class="play canal" href="'+esc(directo)+'" target="_blank" rel="noopener">▶ iVoox</a>'
+    var chip=directo?'<a class="play canal" href="'+esc(directo)+'" onclick="return abrirIvoox(this.getAttribute(\'href\'));">▶ iVoox</a>'
                     :'<a class="play canal" href="'+IVOOX+'" target="_blank" rel="noopener">Ver en iVoox</a>';
     var extra=viejo?' <a class="play canal" href="'+esc(viejo)+'" target="_blank" rel="noopener">Archivo</a>':'';
     if(p[5]) extra+=' <a class="play canal" href="'+esc(p[5])+'" target="_blank" rel="noopener">▶ Spotify</a>';
