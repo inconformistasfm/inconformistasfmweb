@@ -951,7 +951,7 @@ vistas.fotosprograma=function(){
     '<a class="btn blanco" href="#/programas">← Volver a programas</a>'+
     '<h2 style="margin-top:22px">📷 Fotos · '+esc(nombre)+'</h2>'+
     '<p class="intro" id="estadoFotos">Cargando las fotos del programa…</p>'+
-    '<div id="galeriaPrograma" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:20px"></div>'+
+    '<div id="galeriaPrograma" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,240px));gap:14px;margin-top:20px"></div>'+
   '</div></section>';
 };
 
@@ -1117,6 +1117,24 @@ function cargarEnlacesBlogProgramas(){
   }catch(e){}
 }
 
+/* ---------- fotos automáticas (fotos.json lo genera GitHub Actions) ---------- */
+var FOTOS_MANIFIESTO=null;
+function cargarManifiesto(){
+  if(!FOTOS_MANIFIESTO){
+    FOTOS_MANIFIESTO=fetch("fotos.json",{cache:"no-cache"}).then(function(r){
+      if(!r.ok) throw new Error("sin fotos.json");
+      return r.json();
+    }).catch(function(){return null;});
+  }
+  return FOTOS_MANIFIESTO;
+}
+function esAbs(p){return /^(https?:)?\/\//.test(p);}
+function rutaFoto(p){return esAbs(p)?p:String(p).split("/").map(encodeURIComponent).join("/");}
+function fotoMin(p){return (esAbs(p)||/\.gif$/i.test(p))?rutaFoto(p):"optimizadas/min/"+rutaFoto(p)+".webp";}
+function fotoMed(p){return (esAbs(p)||/\.gif$/i.test(p))?rutaFoto(p):"optimizadas/med/"+rutaFoto(p)+".webp";}
+/* si la versión ligera aún no existe, se usa la original */
+function conRespaldo(img,original){img.addEventListener("error",function(){if(img.dataset.r)return;img.dataset.r="1";img.src=rutaFoto(original);});}
+
 /* ---------- archivo ---------- */
 function montarFotosPrograma(){
   var qs=(location.hash||'').split('?')[1]||'';
@@ -1125,20 +1143,15 @@ function montarFotosPrograma(){
   var estado=document.getElementById('estadoFotos'), gal=document.getElementById('galeriaPrograma');
   if(!estado||!gal||!numero)return;
   estado.textContent='Cargando las fotos del programa…';
-  if(String(numero)!=='276'){ estado.textContent='Todavía no hay fotos publicadas para este programa.'; return; }
-  var encontrados=[], pendientes=20;
-  function finalizar(){
-    pendientes--; if(pendientes!==0)return;
-    encontrados.sort(function(a,b){return a.numero-b.numero;});
-    if(!encontrados.length){estado.textContent='Todavía no hay fotos publicadas para este programa.';return;}
-    estado.textContent=encontrados.length+(encontrados.length===1?' foto publicada.':' fotos publicadas.');
-    gal.innerHTML=encontrados.map(function(x){return '<a href="'+esc(x.src)+'" target="_blank" rel="noopener" style="display:block"><img src="'+esc(x.src)+'" alt="Foto del programa '+esc(numero)+'" loading="lazy" style="width:100%;height:220px;object-fit:cover;border-radius:16px;border:3px solid var(--tinta);box-shadow:var(--dura);display:block"></a>';}).join('');
-  }
-  for(var n=1;n<=20;n++){(function(numeroFoto){
-    var src='fotos-programas/276/foto'+numeroFoto+'.jpg'; var img=new Image();
-    img.onload=function(){encontrados.push({numero:numeroFoto,src:src});finalizar();};
-    img.onerror=function(){finalizar();}; img.src=src;
-  })(n);}
+  cargarManifiesto().then(function(m){
+    var fotos=(m&&m.programas&&m.programas[String(numero)])||[];
+    if(!fotos.length){estado.textContent='Todavía no hay fotos publicadas para este programa.';gal.innerHTML='';return;}
+    estado.textContent=fotos.length+(fotos.length===1?' foto publicada.':' fotos publicadas.');
+    gal.innerHTML=fotos.map(function(f,i){
+      return '<a href="'+esc(rutaFoto(f))+'" target="_blank" rel="noopener" style="display:block"><img data-i="'+i+'" src="'+esc(fotoMin(f))+'" alt="Foto '+(i+1)+' del programa '+esc(numero)+'" loading="lazy" decoding="async" style="width:100%;height:220px;object-fit:cover;border-radius:16px;border:3px solid var(--tinta);box-shadow:var(--dura);display:block;background:#eee"></a>';
+    }).join('');
+    gal.querySelectorAll('img').forEach(function(img){conRespaldo(img,fotos[Number(img.dataset.i)]);});
+  });
 }
 
 function pintarProgramas(f){
@@ -1155,10 +1168,10 @@ function pintarProgramas(f){
   if(!res.length){lista.innerHTML='<li class="vacio">No hay ningún programa con ese nombre. Prueba con otra palabra.</li>';return;}
   lista.innerHTML=res.map(function(p){
     var directo=p[2], viejo=p[3], blogDest=p[4] || enlaceBlogPrograma(p[1]);
-    var chip=directo?'<a class="play" href="'+esc(directo)+'" target="_blank" rel="noopener">▶ iVoox</a>'
+    var chip=directo?'<a class="play canal" href="'+esc(directo)+'" target="_blank" rel="noopener">▶ iVoox</a>'
                     :'<a class="play canal" href="'+IVOOX+'" target="_blank" rel="noopener">Ver en iVoox</a>';
     var extra=viejo?' <a class="play canal" href="'+esc(viejo)+'" target="_blank" rel="noopener">Archivo</a>':'';
-    if(p[5]) extra+=' <a class="play canal" href="'+esc(p[5])+'" target="_blank" rel="noopener">Spotify</a>';
+    if(p[5]) extra+=' <a class="play canal" href="'+esc(p[5])+'" target="_blank" rel="noopener">▶ Spotify</a>';
     extra+=' <a class="play canal" href="#/fotosprograma?programa='+encodeURIComponent(p[0])+'">📷 Fotos</a>';
     var cartel=(p[0]===275 && !f)?'<li class="cartel-temporada" style="justify-content:center;text-align:center;background:var(--sol);box-shadow:var(--dura);padding:16px 18px;font-family:\'Fraunces\',serif;font-weight:900;font-size:22px;letter-spacing:.5px;color:var(--tinta)">🎙️ Nueva temporada</li>':'';
     return cartel+'<li><span class="n">'+p[0]+'</span><span class="t"><a class="blog-programa" href="'+esc(blogDest)+'" target="_blank" rel="noopener" title="Abrir entrada en el blog">'+esc(p[1])+'</a></span>'+chip+extra+'</li>';
@@ -1400,11 +1413,14 @@ function montarGaleria(){
     }
     function mostrar(n){
       actual=(n+validas.length)%validas.length;
-      ventana.innerHTML='<img src="'+esc(validas[actual])+'" alt="Foto de Inconformistas FM">';
+      ventana.innerHTML='<img src="'+esc(fotoMed(validas[actual]))+'" alt="Foto de Inconformistas FM" decoding="async">';
+      var im=ventana.querySelector("img");conRespaldo(im,validas[actual]);
+      var sig=new Image();sig.src=fotoMed(validas[(actual+1)%validas.length]);
       if(contador) contador.textContent=(actual+1)+" / "+validas.length;
       mini.querySelectorAll("button").forEach(function(b,i){b.classList.toggle("on",i===actual);});
     }
-    mini.innerHTML=validas.map(function(src,i){return '<button type="button" aria-label="Ver foto '+(i+1)+'"><img src="'+esc(src)+'" alt=""></button>';}).join("");
+    mini.innerHTML=validas.map(function(src,i){return '<button type="button" aria-label="Ver foto '+(i+1)+'"><img src="'+esc(fotoMin(src))+'" alt="" loading="lazy" decoding="async"></button>';}).join("");
+    mini.querySelectorAll("img").forEach(function(im,i){conRespaldo(im,validas[i]);});
     mini.querySelectorAll("button").forEach(function(b,i){b.addEventListener("click",function(){mostrar(i);});});
     var prev=document.getElementById("galPrev"),next=document.getElementById("galNext");
     if(prev) prev.onclick=function(){mostrar(actual-1);iniciarAuto(mostrar);};
@@ -1472,7 +1488,20 @@ function descubrirGaleria(){
     });
   }
 
-  porFuncionNetlify()
+  function porFotosJson(){
+    return cargarManifiesto().then(function(m){
+      if(!m) throw new Error("sin fotos.json");
+      var lista=(m.galeria||[]).slice();
+      Object.keys(m.programas||{}).sort(function(a,b){return Number(b)-Number(a);}).forEach(function(n){
+        lista=lista.concat(m.programas[n]);
+      });
+      if(!lista.length) throw new Error("fotos.json vacío");
+      return lista;
+    });
+  }
+
+  porFotosJson()
+    .catch(porFuncionNetlify)
     .catch(porListadoServidor)
     .catch(porManifiesto)
     .catch(function(){return null;})
