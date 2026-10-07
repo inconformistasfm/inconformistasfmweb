@@ -1579,6 +1579,7 @@ var NOTICIAS_FEEDS=[
 ];
 var NOTICIAS_RSS2JSON="https://api.rss2json.com/v1/api.json?rss_url=";
 var NOTICIAS_FALLBACK=[
+  {title:"Más de un millón de euros para la renovación de aceras, alumbrado y mobiliario urbano en cinco calles de Collado Villalba",link:"https://www.cope.es/emisoras/comunidad-de-madrid/madrid-provincia/villalba/noticias/millon-euros-renovacion-aceras-alumbrado-mobiliario-urbano-cinco-calles-collado-villalba-20261007_3451279.html",source:"COPE de la Sierra",date:"2026-10-07T10:06:00"},
   {title:"El PSOE de Collado Villalba alerta del parón de servicios y las deficiencias en el inicio de la temporada deportiva",link:"https://cadenaser.com/cmadrid/2026/09/22/el-psoe-de-collado-villalba-alerta-del-paron-de-servicios-y-las-deficiencias-en-el-inicio-de-la-temporada-deportiva-ser-madrid-sierra/",source:"SER Madrid Sierra",date:"2026-09-22T12:00:00"},
   {title:"Collado Villalba celebra este domingo la XVI Carrera Solidaria de la Ilusión",link:"https://espaciodiario.com/collado-villalba-celebra-este-domingo-la-xvi-carrera-solidaria-de-la-ilusion-de-la-fundacion-pita-lopez/",source:"Espacio Diario",date:"2026-09-22T10:00:00"},
   {title:"El flamenco abre la nueva Programación Cultural de Otoño en Collado Villalba con ‘Olor a tiempo’",link:"https://espaciodiario.com/el-flamenco-abre-la-nueva-programacion-cultural-de-otono-en-collado-villalba-con-olor-a-tiempo/",source:"Espacio Diario",date:"2026-09-22T09:00:00"},
@@ -1593,7 +1594,7 @@ function cargarNoticias(){
   if(!lista)return;
   var terminado=false,resultados=[];
   function limpiar(){if(window.__noticiasTimer){clearTimeout(window.__noticiasTimer);window.__noticiasTimer=null;}}
-  function pintar(items){
+  function pintar(items,noGuardar){
     var vistos={},limpios=[];
     (items||[]).forEach(function(x){
       var titulo=(x.title||"").replace(/\s+/g," ").trim(),link=x.link||"",fecha=new Date(x.date||x.pubDate||0);
@@ -1605,6 +1606,7 @@ function cargarNoticias(){
     limpios.sort(function(a,b){return b.date-a.date;});
     limpios=limpios.slice(0,12);
     if(!limpios.length)return false;
+    if(!noGuardar){try{localStorage.setItem("noticiasCacheV1",JSON.stringify(limpios));localStorage.setItem("noticiasCacheTsV1",String(Date.now()));}catch(e){}}
     terminado=true;limpiar();
     lista.innerHTML=limpios.map(function(x){
       return '<li><a href="'+esc(x.link)+'" target="_blank" rel="noopener noreferrer"><strong>'+esc(x.title)+'</strong></a><div class="noticia-meta"><span>'+esc(x.source)+'</span><span>'+x.date.toLocaleDateString("es-ES",{day:"2-digit",month:"2-digit",year:"numeric"})+'</span></div></li>';
@@ -1613,28 +1615,34 @@ function cargarNoticias(){
     return true;
   }
   function fallo(){
-    if(terminado)return; terminado=true;limpiar(); pintar(NOTICIAS_FALLBACK);
+    if(terminado)return; terminado=true;limpiar(); pintar(NOTICIAS_FALLBACK,true);
     if(marca)marca.textContent="Últimos titulares de Collado Villalba · fuente RSS";
   }
+  var pendientes=NOTICIAS_FEEDS.length,vivo=false;
   function pedir(i){
-    if(terminado)return;
-    if(i>=NOTICIAS_FEEDS.length){fallo();return;}
     var url=NOTICIAS_RSS2JSON+encodeURIComponent(NOTICIAS_FEEDS[i]);
-    fetch(url,{cache:"no-store"})
+    fetch(url)
       .then(function(r){if(!r.ok)throw Error("rss");return r.json();})
       .then(function(d){
         var its=(d&&d.items)||[];
         its.forEach(function(x){resultados.push({title:x.title,link:x.link,date:x.pubDate,source:x.author||((d.feed&&d.feed.title)||"Google News")});});
-        /* No esperamos a una sola fuente: reunimos varias y mostramos los 12 más recientes. */
-        if(i===NOTICIAS_FEEDS.length-1){if(!pintar(resultados))fallo();}
-        else pedir(i+1);
+        /* Se pinta en cuanto llega la primera fuente y se completa con las demás. */
+        if(its.length&&pintar(resultados))vivo=true;
       })
-      .catch(function(){pedir(i+1);});
+      .catch(function(){})
+      .then(function(){
+        if(--pendientes===0&&!vivo)fallo();
+      });
   }
   lista.innerHTML='<li class="noticias-cargando">Cargando titulares de Collado Villalba…</li>';
   if(marca)marca.textContent="Actualizando titulares…";
+  /* Si ya se cargaron noticias en otra visita, se muestran al instante mientras se actualizan. */
+  try{
+    var cache=JSON.parse(localStorage.getItem("noticiasCacheV1")||"null");
+    if(cache&&cache.length&&pintar(cache,true)&&marca)marca.textContent="Actualizando titulares…";
+  }catch(e){}
   window.__noticiasTimer=setTimeout(fallo,12000);
-  pedir(0);
+  for(var k=0;k<NOTICIAS_FEEDS.length;k++)pedir(k);
 }
 function iniciarActualizacionNoticias(){
   if(NOTICIAS_TIMER)clearInterval(NOTICIAS_TIMER);
@@ -1643,6 +1651,42 @@ function iniciarActualizacionNoticias(){
     NOTICIAS_TIMER=setInterval(function(){if(ruta()==="noticias")cargarNoticias();},300000);
   }
 }
+
+/* Precarga en segundo plano: deja las noticias guardadas para que la sección abra al instante.
+   No se repite si la lista guardada tiene menos de 10 minutos. */
+function precargarNoticias(){
+  try{
+    var ts=parseInt(localStorage.getItem("noticiasCacheTsV1")||"0",10);
+    if(ts&&Date.now()-ts<600000)return;
+  }catch(e){}
+  if(ruta()==="noticias")return;
+  var res=[],pend=NOTICIAS_FEEDS.length;
+  function fin(){
+    if(--pend>0)return;
+    var vistos={},limpios=[];
+    res.forEach(function(x){
+      var titulo=(x.title||"").replace(/\s+/g," ").trim(),link=x.link||"",fecha=new Date(x.date||0);
+      if(!titulo||!link||isNaN(fecha.getTime()))return;
+      var clave=titulo.toLowerCase().replace(/[^a-z0-9áéíóúüñ ]/gi,"").trim();
+      if(vistos[clave])return; vistos[clave]=1;
+      limpios.push({title:titulo,link:link,date:fecha,source:x.source});
+    });
+    limpios.sort(function(a,b){return b.date-a.date;});
+    limpios=limpios.slice(0,12);
+    if(!limpios.length)return;
+    try{localStorage.setItem("noticiasCacheV1",JSON.stringify(limpios));localStorage.setItem("noticiasCacheTsV1",String(Date.now()));}catch(e){}
+  }
+  NOTICIAS_FEEDS.forEach(function(f){
+    fetch(NOTICIAS_RSS2JSON+encodeURIComponent(f))
+      .then(function(r){if(!r.ok)throw Error("rss");return r.json();})
+      .then(function(d){
+        ((d&&d.items)||[]).forEach(function(x){res.push({title:x.title,link:x.link,date:x.pubDate,source:x.author||((d.feed&&d.feed.title)||"Google News")});});
+      })
+      .catch(function(){})
+      .then(fin);
+  });
+}
+setTimeout(precargarNoticias,2500);
 
 /* ---------- router ---------- */
 function ruta(){var h=(location.hash||"").replace(/^#\/?/,"").split("?")[0];return vistas[h]?h:"inicio";}
