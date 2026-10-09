@@ -1172,8 +1172,10 @@ function pintarProgramas(f){
   f=(f||"").trim().toLowerCase();
   var ahora=new Date();
   var mostrarEsther=ahora >= new Date("2026-10-03T20:30:00");
+  var mostrarDecada=ahora >= new Date("2026-10-10T20:30:00");
   var res=P.filter(function(p){
     if(p[0]===276 && !mostrarEsther) return false;
+    if(p[0]===277 && !mostrarDecada) return false;
     return !f || (p[1]+" "+p[0]).toLowerCase().indexOf(f)>-1;
   });
   cont.textContent = f ? (res.length===1?"1 programa encontrado":res.length+" programas encontrados") : P.length+" programas en el archivo";
@@ -1189,6 +1191,12 @@ function pintarProgramas(f){
     return cartel+'<li><span class="n">'+p[0]+'</span><span class="t"><a class="blog-programa" href="'+esc(blogDest)+'" target="_blank" rel="noopener" title="Abrir entrada en el blog">'+esc(p[1])+'</a></span>'+chip+extra+'</li>';
   }).join("");
 }
+
+// Publica automáticamente el programa 277 el 10/10/2026 a las 20:30 (hora local).
+setTimeout(function(){
+  var campoBusqueda=document.getElementById("q");
+  pintarProgramas(campoBusqueda ? campoBusqueda.value : "");
+}, Math.max(0, new Date("2026-10-10T20:30:00").getTime()-Date.now()));
 
 /* ---------- dial ---------- */
 function montarFormulario(){
