@@ -189,6 +189,34 @@
   .play:hover{background:var(--frambuesa);color:#fff}
   .vacio{background:var(--papel);border:3px dashed var(--tinta);border-radius:16px;padding:26px;text-align:center;color:var(--suave)}
 
+  /* programas en tarjetas: 3 columnas (2 en tablet, 1 en móvil) */
+  ul.progs#lista{grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;align-items:stretch}
+  ul.progs#lista li.pc{display:flex;flex-direction:column;align-items:stretch;gap:10px;padding:10px;flex-wrap:nowrap}
+  ul.progs#lista li.vacio,ul.progs#lista li.cartel-temporada{grid-column:1/-1}
+  #lista .pc-foto{display:block;width:100%;height:130px;object-fit:contain;object-position:center;border-radius:12px;border:0;background:transparent}
+  #lista .pc-sinfoto{display:flex;align-items:center;justify-content:center;height:130px;border-radius:12px;border:2px dashed var(--tinta);background:var(--nata);font-size:34px;opacity:.6}
+  #lista .pc-media{position:relative;overflow:hidden;border-radius:12px}
+  #lista .pc-sinfoto.con-logo{border:0;background:var(--logo-url) center/auto 78% no-repeat;opacity:1;font-size:0}
+  #lista .pc-num{position:absolute;left:8px;top:8px;background:var(--papel);color:var(--frambuesa);border:2px solid var(--tinta);border-radius:99px;font-family:"Fraunces";font-weight:900;font-size:12px;padding:2px 9px;line-height:1.3}
+  #lista .pc-cab{display:flex;gap:10px;align-items:baseline}
+  #lista .pc-cab .t a{font-size:14.5px;line-height:1.3}
+  #lista .pc-botones{flex-direction:column;align-items:stretch}
+  #lista .pc-botones .escuchar{text-align:center;font-size:13px;padding:8px 12px}
+  #lista .pc-sec{display:flex;flex-wrap:wrap;gap:6px}
+  #lista .pc-botones .play.sec{background:transparent;color:var(--suave);border:1.5px solid rgba(43,27,61,.35);font-size:11px;padding:3px 9px}
+  #lista .pc-botones .play.sec:hover{background:var(--frambuesa);color:#fff;border-color:var(--tinta)}
+  ul.progs#lista li.pc-mas{grid-column:1/-1;display:block;text-align:center;background:none;border:0;padding:6px 0}
+  ul.progs#lista li.pc-mas:hover{background:none}
+  #lista .pc-cab .t{flex:1;min-width:0;overflow-wrap:anywhere}
+  #lista .pc-botones{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
+  #lista .pc-botones .play{padding:5px 10px;font-size:11.5px}
+  #lista .pc-botones .play.escuchar{background:var(--turquesa);color:#fff}
+  #lista .pc-botones .play.escuchar:hover{background:var(--frambuesa)}
+  @media(max-width:1250px){ul.progs#lista{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  @media(max-width:1000px){ul.progs#lista{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media(max-width:800px){ul.progs#lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:520px){ul.progs#lista{grid-template-columns:minmax(0,1fr);gap:14px}#lista .pc-foto,#lista .pc-sinfoto{height:200px}}
+
   /* ---------- enlaces ---------- */
   .enlaces{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
   .enlaces a{display:block;background:var(--papel);border:3px solid var(--tinta);border-radius:18px;padding:16px 18px;
@@ -1223,10 +1251,45 @@ function cerrarSpotify(ev){
   document.body.style.overflow="";
 }
 
+var FOTOS_PROGRAMAS=null, FOTOS_PEDIDAS=false;
+var PROGS_LOTE=60, PROGS_LIMITE=PROGS_LOTE, PROGS_ULTIMO_FILTRO=null;
+var LOGO_PROGS=null;
+function logoProgramas(){
+  if(LOGO_PROGS===null){
+    var im=document.querySelector(".logo img");
+    LOGO_PROGS=(im&&im.getAttribute("src"))||"";
+    if(LOGO_PROGS) document.documentElement.style.setProperty("--logo-url",'url("'+LOGO_PROGS+'")');
+  }
+  return !!LOGO_PROGS;
+}
+function compartirPrograma(btn){
+  var titulo=btn.getAttribute("data-t")||"Inconformistas FM", url=btn.getAttribute("data-u")||location.href;
+  var texto="Escucha este programa de Inconformistas FM: "+titulo;
+  var original=btn.getAttribute("data-label")||btn.textContent;
+  btn.setAttribute("data-label",original);
+  function aviso(t){btn.textContent=t;clearTimeout(btn._t);btn._t=setTimeout(function(){btn.textContent=original;},2000);}
+  if(navigator.share){
+    navigator.share({title:"Inconformistas FM",text:texto,url:url}).catch(function(){});
+    return false;
+  }
+  var completo=texto+" "+url;
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(completo).then(function(){aviso("✓ Enlace copiado");}).catch(function(){window.prompt("Copia este enlace:",completo);});
+  }else{
+    window.prompt("Copia este enlace:",completo);
+  }
+  return false;
+}
+function verMasProgramas(){
+  PROGS_LIMITE+=PROGS_LOTE;
+  var q=document.getElementById("q");
+  pintarProgramas(q?q.value:"");
+}
 function pintarProgramas(f){
   var lista=document.getElementById("lista"),cont=document.getElementById("contador");
   if(!lista) return;
   f=(f||"").trim().toLowerCase();
+  if(PROGS_ULTIMO_FILTRO!==f){PROGS_LIMITE=PROGS_LOTE;PROGS_ULTIMO_FILTRO=f;}
   var ahora=new Date();
   var mostrarEsther=ahora >= new Date("2026-10-03T20:30:00");
   var mostrarDecada=ahora >= new Date("2026-10-10T20:30:00");
@@ -1239,16 +1302,53 @@ function pintarProgramas(f){
   });
   cont.textContent = f ? (res.length===1?"1 programa encontrado":res.length+" programas encontrados") : P.length+" programas en el archivo";
   if(!res.length){lista.innerHTML='<li class="vacio">No hay ningún programa con ese nombre. Prueba con otra palabra.</li>';return;}
+  var total=res.length;
+  res=res.slice(0,PROGS_LIMITE);
+  var hayLogo=logoProgramas();
   lista.innerHTML=res.map(function(p){
     var directo=p[2], viejo=p[3], blogDest=p[4] || enlaceBlogPrograma(p[1]);
-    var chip=directo?'<a class="play canal" href="'+esc(directo)+'" onclick="return abrirIvoox(this.getAttribute(\'href\'));">▶ iVoox</a>'
-                    :'<a class="play canal" href="'+IVOOX+'" target="_blank" rel="noopener">Ver en iVoox</a>';
-    var extra=viejo?' <a class="play canal" href="'+esc(viejo)+'" target="_blank" rel="noopener">Archivo</a>':'';
-    if(p[5]) extra+=' <a class="play canal" href="'+esc(p[5])+'" onclick="return abrirSpotify(this.getAttribute(\'href\'))">▶ Spotify</a>';
-    extra+=' <a class="play canal" href="#/fotosprograma?programa='+encodeURIComponent(p[0])+'">📷 Fotos</a>';
+    var hrefEsc=directo?esc(directo):IVOOX;
+    var accion=directo?' onclick="return abrirIvoox(this.getAttribute(\'href\'));"':' target="_blank" rel="noopener"';
+    var chip='<a class="play canal escuchar" href="'+hrefEsc+'"'+accion+'>▶ Escuchar ahora</a>';
+    var extra=viejo?' <a class="play canal sec" href="'+esc(viejo)+'" target="_blank" rel="noopener">Archivo</a>':'';
+    if(p[5]) extra+=' <a class="play canal sec" href="'+esc(p[5])+'" onclick="return abrirSpotify(this.getAttribute(\'href\'))">▶ Spotify</a>';
+    extra+=' <a class="play canal sec" href="#/fotosprograma?programa='+encodeURIComponent(p[0])+'">📷 Fotos</a>';
     var cartel=(p[0]===275 && !f)?'<li class="cartel-temporada" style="justify-content:center;text-align:center;background:var(--sol);box-shadow:var(--dura);padding:16px 18px;font-family:\'Fraunces\',serif;font-weight:900;font-size:22px;letter-spacing:.5px;color:var(--tinta)">🎙️ Nueva temporada</li>':'';
-    return cartel+'<li><span class="n">'+p[0]+'</span><span class="t"><a class="blog-programa" href="'+esc(blogDest)+'" target="_blank" rel="noopener" title="Abrir entrada en el blog">'+esc(p[1])+'</a></span>'+chip+extra+'</li>';
-  }).join("");
+    var fotos=(FOTOS_PROGRAMAS&&FOTOS_PROGRAMAS[String(p[0])])||[];
+    var urlCompartir=(function(){
+      if(directo){var mi=String(directo).match(/player_ej_(\d+)/i);return mi?"https://go.ivoox.com/rf/"+mi[1]:directo;}
+      return p[4]||blogDest||IVOOX;
+    })();
+    var btnCompartir=' <button type="button" class="play canal sec" data-t="'+esc("Programa "+p[0]+": "+p[1])+'" data-u="'+esc(urlCompartir)+'" onclick="return compartirPrograma(this)">↗ Compartir</button>';
+    extra+=btnCompartir;
+    var portada=fotos.filter(function(x){return /(^|\/)portada[^\/]*$/i.test(String(x));})[0]||fotos[0];
+    var foto=fotos.length?'<img class="pc-foto" data-f="'+esc(portada)+'" src="'+esc(fotoMin(portada))+'" alt="Foto del programa '+esc(p[0])+'" loading="lazy" decoding="async">':(hayLogo?'<div class="pc-sinfoto con-logo" role="img" aria-label="Inconformistas FM"></div>':'<div class="pc-sinfoto" aria-hidden="true">🎙️</div>');
+    return cartel+'<li class="pc"><div class="pc-media">'+foto+'<span class="pc-num">Nº '+p[0]+'</span></div><div class="pc-cab"><span class="t"><a class="blog-programa" href="'+esc(blogDest)+'" target="_blank" rel="noopener" title="Abrir entrada en el blog">'+esc(p[1])+'</a></span></div><div class="pc-botones">'+chip+'<div class="pc-sec">'+extra+'</div></div></li>';
+  }).join("")+(total>res.length?'<li class="pc-mas"><button type="button" class="btn blanco" onclick="verMasProgramas()">Ver más programas ('+(total-res.length)+' restantes)</button></li>':'');
+  if(total>res.length) cont.textContent+=" · mostrando "+res.length;
+  lista.querySelectorAll("img.pc-foto").forEach(function(img){conRespaldo(img,img.getAttribute("data-f"));});
+  if(FOTOS_PROGRAMAS===null && !FOTOS_PEDIDAS){
+    FOTOS_PEDIDAS=true;
+    var BASE_WEB="https://inconformistasfm.es/";
+    cargarManifiesto().then(function(m){
+      if(m&&m.programas&&Object.keys(m.programas).length) return m.programas;
+      /* respaldo: si no hay fotos.json junto a este archivo, se pide al sitio publicado */
+      return fetch(BASE_WEB+"fotos.json",{cache:"no-cache"}).then(function(r){
+        if(!r.ok) throw new Error("sin fotos.json");
+        return r.json();
+      }).then(function(d){
+        var out={},src=(d&&d.programas)||{};
+        Object.keys(src).forEach(function(k){
+          out[k]=(src[k]||[]).map(function(f){return esAbs(f)?f:BASE_WEB+rutaFoto(f);});
+        });
+        return out;
+      }).catch(function(){return {};});
+    }).then(function(programas){
+      FOTOS_PROGRAMAS=programas||{};
+      var q=document.getElementById("q");
+      pintarProgramas(q?q.value:"");
+    });
+  }
 }
 
 // Publica automáticamente el programa 277 el 10/10/2026 a las 20:30 (hora local).
