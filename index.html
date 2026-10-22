@@ -1979,5 +1979,76 @@ pintar();
   setInterval(actualizarContador,60000);
 })();
 </script>
+
+<script>
+/* Cambios de Bandas de rock programados para el 24/10/2026 a las 20:30, hora peninsular española.
+   Hasta esa fecha, este bloque no modifica el contenido actual de la página. */
+(function(){
+  var fechaActivacion = new Date("2026-10-24T20:30:00+02:00");
+  var tituloPrograma = "Bandas de rock que cambiaron su formación";
+  var reproductor = "https://www.ivoox.com/player_ej_182637950_6_1.html?c1=cb2650";
+  var noticiaActualizada = false;
+  var programaAgregado = false;
+
+  function activarCambios(){
+    if (new Date() < fechaActivacion) return;
+
+    /* Actualiza la noticia solo cuando llega la hora programada y cuando la portada está presente. */
+    if (!noticiaActualizada) {
+      var tarjetas = document.querySelectorAll(".anuncio-rock");
+      tarjetas.forEach(function(tarjeta){
+        var h3 = tarjeta.querySelector("h3");
+        if (!h3 || h3.textContent.trim() !== tituloPrograma) return;
+        var contenedorTexto = h3.parentElement;
+        var parrafos = contenedorTexto.querySelectorAll("p");
+        if (parrafos[0]) {
+          parrafos[0].innerHTML = 'En <b>Inconformistas FM</b> hablamos de bandas de rock que han cambiado su composición durante su carrera, como Nightwish, Metallica, AC/DC, Black Sabbath, Pink Floyd y Mägo de Oz.';
+        }
+        Array.prototype.forEach.call(parrafos, function(p){
+          if (p.textContent.indexOf("Sábado 24 de octubre a las 19:30") !== -1) p.remove();
+        });
+        if (!contenedorTexto.querySelector(".escuchar-rock-programado")) {
+          var zona = document.createElement("div");
+          zona.className = "escuchar-rock-programado";
+          zona.style.cssText = "margin-top:14px";
+          var enlace = document.createElement("a");
+          enlace.href = reproductor;
+          enlace.textContent = "▶ Escuchar ahora";
+          enlace.style.cssText = "display:inline-block;color:#fff;font-weight:700;font-size:12px;padding:9px 14px;border-radius:20px;background:var(--turquesa);text-decoration:none";
+          enlace.addEventListener("click", function(ev){ ev.preventDefault(); abrirIvoox(reproductor); });
+          zona.appendChild(enlace);
+          contenedorTexto.appendChild(zona);
+        }
+        noticiaActualizada = true;
+      });
+    }
+
+    /* Añade el programa 279 a la lista solo al activarse. */
+    if (!programaAgregado && typeof P !== "undefined") {
+      if (!P.some(function(p){ return p[0] === 279; })) {
+        P.unshift([279, tituloPrograma, reproductor, null, null, null]);
+      }
+      programaAgregado = true;
+      var lista = document.getElementById("lista");
+      if (lista && typeof pintarProgramas === "function") {
+        var buscador = document.getElementById("q");
+        pintarProgramas(buscador ? buscador.value : "");
+      }
+      var cifras = document.querySelector(".cifras");
+      if (cifras) {
+        var total = cifras.querySelector("div b");
+        if (total) total.textContent = P.length;
+      }
+    }
+  }
+
+  activarCambios();
+  var reloj = window.setInterval(function(){
+    activarCambios();
+    if (noticiaActualizada && programaAgregado) window.clearInterval(reloj);
+  }, 15000);
+})();
+</script>
+
 </body>
 </html>
