@@ -2147,6 +2147,10 @@ pintar();
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", actualizarPortadaHalloween);
   else actualizarPortadaHalloween();
   window.addEventListener("load", actualizarPortadaHalloween);
+  /* La web es una SPA: al volver a Inicio se vuelve a crear el HTML. Reaplicar el cambio tras cada navegación. */
+  window.addEventListener("hashchange", function(){
+    window.setTimeout(actualizarPortadaHalloween, 0);
+  });
 })();
 </script>
 
