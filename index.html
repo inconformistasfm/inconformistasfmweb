@@ -2031,7 +2031,8 @@ pintar();
     var etiqueta=texto.querySelector('span'); if(etiqueta && etiqueta.textContent!=='ENTREVISTA') etiqueta.textContent='ENTREVISTA';
     var contador=texto.querySelector('#contador-dias-rock'); if(contador) contador.remove();
     Array.prototype.forEach.call(principal.querySelectorAll('a,button'),function(el){
-      if(/escuchar\s*ahora/i.test((el.textContent||'').trim()) || /escuchar/i.test((el.textContent||'').trim())) el.remove();
+      if(el.hasAttribute('data-dearte-programado')) return;
+      if(/escuchar\\s*ahora/i.test((el.textContent||'').trim()) || /escuchar/i.test((el.textContent||'').trim())) el.remove();
     });
   }
   var queued=false;
@@ -2193,5 +2194,85 @@ pintar();
   window.addEventListener("hashchange",function(){setTimeout(actualizar,100);});
   window.setInterval(actualizar,1000);
 })();
-</script></body>
+</script>
+<script>
+/* Actualización programada De Arte Flamenco + programa 281. */
+(function(){
+  var INICIO = new Date("2026-11-07T00:00:00+01:00");
+  var EMISION = new Date("2026-11-07T20:30:00+01:00");
+  var IVOOX = "https://www.ivoox.com/player_ej_183380889_6_1.html?c1=cb2650";
+  var TITULO = "ENTREVISTA A DE ARTE FLAMENCO";
+  var TEXTO = 'El duende, el compás y el sentimiento de la música flamenca llegan esta semana a nuestros micrófonos. hoy <b>sábado 7 de noviembre, a las 19:30 h</b>, contaremos en <i>Inconformistas FM</i> con la presencia de <b>De Arte Flamenco</b>. Además, nos sorprenderán con alguno de sus temas en directo. Recuerda: 7 de noviembre a las 19:30 h en la 107,4 FM y desde nuestra web <b>inconformistasfm.es</b>.';
+  var agregado = false;
+
+  function botonNoticia(contenedor, emitido){
+    var anterior=contenedor.querySelector('[data-dearte-programado="1"]');
+    if(anterior) anterior.remove();
+    var a=document.createElement('a');
+    a.setAttribute('data-dearte-programado','1');
+    a.className='btn rosa';
+    a.href=emitido ? IVOOX : '#';
+    a.textContent=emitido ? '▶ Escuchar' : '▶ Escucha en directo';
+    a.style.cssText='display:inline-flex;margin-top:12px;align-items:center;justify-content:center';
+    a.addEventListener('click',function(ev){
+      ev.preventDefault();
+      if(emitido){ if(typeof window.abrirIvoox==='function') window.abrirIvoox(IVOOX); }
+      else if(typeof window.iniciarRadio==='function') window.iniciarRadio();
+    });
+    contenedor.appendChild(a);
+  }
+
+  function actualizarPrincipal(ahora){
+    var principal=document.querySelector('.anuncio-rock');
+    if(!principal) return;
+    var h=principal.querySelector('h3');
+    if(!h) return;
+    h.textContent=TITULO;
+    var texto=h.parentElement;
+    var p=texto.querySelector('p');
+    if(!p){p=document.createElement('p');texto.appendChild(p);}
+    if(p.innerHTML!==TEXTO) p.innerHTML=TEXTO;
+    Array.prototype.forEach.call(texto.querySelectorAll('p'),function(x){if(x!==p)x.remove();});
+    botonNoticia(texto,ahora>=EMISION);
+  }
+
+  function limpiarNumerosNoticias(){
+    document.querySelectorAll('.numero-noticia').forEach(function(badge){badge.remove();});
+  }
+
+  function agregarPrograma281(ahora){
+    if(ahora<EMISION || agregado || !Array.isArray(window.P)) return;
+    if(!window.P.some(function(p){return Number(p[0])===281;})){
+      window.P.unshift([281,TITULO,IVOOX,null,null,null]);
+    }
+    agregado=true;
+    if(typeof window.pintarProgramas==='function'){
+      var q=document.getElementById('q');
+      window.pintarProgramas(q?q.value:'');
+    }
+    actualizarContador();
+  }
+
+  function actualizarContador(){
+    var cifra=document.querySelector('.cifras div b');
+    if(cifra && Array.isArray(window.P)) cifra.textContent=String(window.P.length);
+  }
+
+  function ejecutar(){
+    var ahora=new Date();
+    actualizarPrincipal(ahora);
+    limpiarNumerosNoticias();
+    agregarPrograma281(ahora);
+    actualizarContador();
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',ejecutar);
+  else ejecutar();
+  window.addEventListener('load',ejecutar);
+  window.addEventListener('hashchange',function(){setTimeout(ejecutar,250);});
+  setInterval(ejecutar,3000);
+})();
+</script>
+
+</body>
 </html>
