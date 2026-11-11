@@ -132,13 +132,13 @@ function renderViews(htmlSource) {
     // Corrige saltos semánticos de encabezados sin alterar su presentación.
     let lastHeadingLevel = 0;
     const headingStack = [];
-    markup = markup.replace(/<\\/?h[1-6]\\b[^>]*>/gi, function (tag) {
-      const closing = /^<\\//.test(tag);
+    markup = markup.replace(/<\/?h[1-6]\b[^>]*>/gi, function (tag) {
+      const closing = /^<\//.test(tag);
       if (closing) {
         const previous = headingStack.pop();
         return '</h' + (previous || 2) + '>';
       }
-      const match = tag.match(/^<h([1-6])\\b([^>]*)>/i);
+      const match = tag.match(/^<h([1-6])\b([^>]*)>/i);
       const originalLevel = Number(match[1]);
       const level = lastHeadingLevel && originalLevel > lastHeadingLevel + 1
         ? lastHeadingLevel + 1 : originalLevel;
