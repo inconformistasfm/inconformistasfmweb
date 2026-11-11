@@ -1852,15 +1852,47 @@ function precargarNoticias(){
 }
 setTimeout(precargarNoticias,2500);
 
-/* ---------- router ---------- */
-function ruta(){var h=(location.hash||"").replace(/^#\/?/,"").split("?")[0];return vistas[h]?h:"inicio";}
+/* ---------- router y URLs limpias para buscadores ---------- */
+var rutasSEO={inicio:"/",programas:"/programas",noticias:"/noticias",equipo:"/equipo",galeria:"/galeria",colaboradores:"/artistas",radio:"/radio-online",contacto:"/contacto"};
+var descripcionesSEO={
+inicio:"Inconformistas FM es el programa de Radio Villalba: entrevistas, música, cultura y actualidad con humor y sin censura. Escúchanos en 107.4 FM y online.",
+programas:"Archivo de programas y entrevistas de Inconformistas FM. Escucha programas emitidos en Radio Villalba 107.4 FM.",
+noticias:"Noticias de Collado Villalba y actualidad local en Inconformistas FM.",
+equipo:"Conoce al equipo de Inconformistas FM, el programa de entrevistas, música y cultura de Radio Villalba 107.4 FM.",
+galeria:"Galería de fotografías de Inconformistas FM, sus programas, entrevistas y actividades.",
+colaboradores:"Artistas, músicos, escritores y colaboradores que han pasado por Inconformistas FM.",
+radio:"Escucha Radio Villalba 107.4 FM en directo y sigue Inconformistas FM también online.",
+contacto:"Contacta con Inconformistas FM para proponer entrevistas, colaboraciones o enviar tus mensajes."
+};
+function ruta(){
+  var h=(location.hash||"").replace(/^#\/?/,"").split("?")[0];
+  if(h&&vistas[h])return h;
+  var p=location.pathname.replace(/\/+$/,"")||"/";
+  for(var k in rutasSEO){if(rutasSEO[k]===p)return k;}
+  return "inicio";
+}
+function actualizarSEO(r){
+  var titulo=(r==="inicio"?"":r.charAt(0).toUpperCase()+r.slice(1)+" · ")+"Inconformistas FM — Radio Villalba 107.4";
+  var canonical="https://inconformistasfm.es"+(rutasSEO[r]||"/");
+  document.title=titulo;
+  var desc=document.querySelector('meta[name="description"]');
+  if(desc)desc.setAttribute("content",descripcionesSEO[r]||descripcionesSEO.inicio);
+  var canon=document.querySelector('link[rel="canonical"]');
+  if(canon)canon.setAttribute("href",canonical);
+  var ogTitle=document.querySelector('meta[property="og:title"]');
+  if(ogTitle)ogTitle.setAttribute("content",titulo);
+  var ogDesc=document.querySelector('meta[property="og:description"]');
+  if(ogDesc)ogDesc.setAttribute("content",descripcionesSEO[r]||descripcionesSEO.inicio);
+  var ogUrl=document.querySelector('meta[property="og:url"]');
+  if(ogUrl)ogUrl.setAttribute("content",canonical);
+}
 function pintar(){
   cargarRecursos();
   var r=ruta();
   document.getElementById("main").innerHTML=vistas[r]();
   var a=document.querySelectorAll("nav.menu a");
-  for(var i=0;i<a.length;i++){a[i].classList.toggle("on",a[i].getAttribute("href")==="#/"+r);}
-  document.title=(r==="inicio"?"":r.charAt(0).toUpperCase()+r.slice(1)+" · ")+"Inconformistas FM — Radio Villalba 107.4";
+  for(var i=0;i<a.length;i++){var href=(a[i].getAttribute("href")||"").replace(/^#\/?/,"");a[i].classList.toggle("on",(href.split("?")[0]||"inicio")===r);}
+  actualizarSEO(r);
   document.getElementById("menu").classList.remove("abierto");
   document.getElementById("burger").setAttribute("aria-expanded","false");
   if(r==="programas"){
@@ -1880,7 +1912,8 @@ document.getElementById("burger").addEventListener("click",function(){
   this.setAttribute("aria-expanded",ab?"true":"false");
 });
 window.addEventListener("hashchange",pintar);
-if(!location.hash) location.replace("#/inicio");
+window.addEventListener("popstate",pintar);
+if(!location.hash && location.pathname==="/") location.replace("#/inicio");
 pintar();
 </script>
 <script>
