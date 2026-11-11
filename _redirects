@@ -1,15 +1,15 @@
-# Rutas limpias para las secciones públicas de Inconformistas FM.
-/programas /index.html 200
-/programas/ /index.html 200
-/noticias /index.html 200
-/noticias/ /index.html 200
-/equipo /index.html 200
-/equipo/ /index.html 200
-/galeria /index.html 200
-/galeria/ /index.html 200
-/artistas /index.html 200
-/artistas/ /index.html 200
-/radio-online /index.html 200
-/radio-online/ /index.html 200
-/contacto /index.html 200
-/contacto/ /index.html 200
+# Cada URL pública entrega su propio documento HTML generado en el build.
+/programas /programas.html 200
+/programas/ /programas.html 200
+/noticias /noticias.html 200
+/noticias/ /noticias.html 200
+/equipo /equipo.html 200
+/equipo/ /equipo.html 200
+/galeria /galeria.html 200
+/galeria/ /galeria.html 200
+/artistas /artistas.html 200
+/artistas/ /artistas.html 200
+/radio-online /radio-online.html 200
+/radio-online/ /radio-online.html 200
+/contacto /contacto.html 200
+/contacto/ /contacto.html 200
