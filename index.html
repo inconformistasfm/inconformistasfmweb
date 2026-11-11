@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>Inconformistas FM — Radio Villalba 107.4</title>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <meta content="Inconformistas FM es el programa de Radio Villalba: entrevistas, música, cultura y actualidad con humor y sin censura. Escúchanos en 107.4 FM y online." name="description"/>
 <link href="https://inconformistasfm.es/" rel="canonical"/>
 <meta content="index,follow,max-image-preview:large" name="robots"/>
@@ -67,6 +67,8 @@
   a{color:var(--uva)}
   a:hover{color:var(--frambuesa)}
   :focus-visible{outline:3px solid var(--uva);outline-offset:3px;border-radius:6px}
+  .salto-contenido{position:absolute;left:12px;top:-100px;z-index:1000;padding:10px 16px;background:var(--sol);color:var(--tinta);border:3px solid var(--tinta);font-weight:700;border-radius:8px}
+  .salto-contenido:focus{top:12px}
 
   h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:900;line-height:1.02;margin:0;letter-spacing:-.02em}
   h2{font-size:clamp(30px,5.2vw,46px);margin-bottom:12px}
@@ -90,7 +92,10 @@
 
   .seccion{padding:46px 0 72px;animation:sube .3s ease both}
   @keyframes sube{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-  @media (prefers-reduced-motion:reduce){.seccion{animation:none}}
+  @media (prefers-reduced-motion:reduce){
+    html:focus-within{scroll-behavior:auto!important}
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  }
 
   /* ---------- botones ---------- */
   .btn{display:inline-block;font-weight:700;font-size:16px;text-decoration:none;padding:13px 24px;border-radius:99px;
@@ -612,6 +617,7 @@
 </style>
 </head>
 <body>
+<a class="salto-contenido" href="#main">Saltar al contenido principal</a>
 <header class="top">
 <div class="wrap topin">
 <a aria-label="Inconformistas FM, inicio" class="logo" href="#/inicio">
@@ -973,7 +979,7 @@ vistas.programas=function(){
   return '<section class="seccion"><div class="wrap">'+
     '<h2>Programas</h2>'+
     '<p class="intro">Todas las entrevistas emitidas desde que empezó el programa. Busca por artista, grupo, asociación o fecha y escúchalo en iVoox.</p>'+
-    '<div class="buscador"><input id="q" type="search" placeholder="🔍  Barei, Chenoa, Eurovisión, 2015…" autocomplete="off"></div>'+
+    '<div class="buscador"><input id="q" type="search" aria-label="Buscar programas y entrevistas" placeholder="🔍  Barei, Chenoa, Eurovisión, 2015…" autocomplete="off"></div>'+
     '<p class="contador" id="contador"></p>'+
     '<ul class="progs" id="lista"></ul>'+
     '<div class="nota"><p>Los programas que aún no tienen audio subido llevan al canal del programa en <a href="'+IVOOX+'" target="_blank" rel="noopener">iVoox</a>. Los más antiguos conservan su enlace original de archivo.</p></div>'+
@@ -1102,8 +1108,8 @@ vistas.contacto=function(){
     '<div class="ficha"><h3>Escríbenos</h3>'+
       '<p>Rellena el formulario y pulsa enviar. El mensaje llegará directamente a nuestro correo.</p>'+
       '<div class="form">'+
-        '<label for="fnombre">Tu nombre</label><input id="fnombre" name="name" type="text" placeholder="Nombre y apellidos">\n        <label for="femail">Tu correo electrónico <span aria-hidden="true">*</span></label><input id="femail" name="email" type="email" placeholder="tu@correo.com" autocomplete="email" required>\n'+
-        '<label for="fasunto">Asunto</label><input id="fasunto" name="title" type="text" placeholder="Propuesta de entrevista, saludo, dudas…">'+
+        '<label for="fnombre">Tu nombre</label><input id="fnombre" name="name" type="text" aria-label="Nombre y apellidos" placeholder="Nombre y apellidos">\n        <label for="femail">Tu correo electrónico <span aria-hidden="true">*</span></label><input id="femail" name="email" type="email" aria-label="Correo electrónico" placeholder="tu@correo.com" autocomplete="email" required>\n'+
+        '<label for="fasunto">Asunto</label><input id="fasunto" name="title" type="text" aria-label="Asunto del mensaje" placeholder="Propuesta de entrevista, saludo, dudas…">'+
         '<label for="fmensaje">Mensaje</label><textarea id="fmensaje" name="message" rows="5" placeholder="Cuéntanos"></textarea>'+
         '<div class="acciones"><button class="btn rosa" id="fenviar" type="button">Enviar el mensaje</button></div>'+
         '<p class="pistanota" id="faviso">También puedes escribirnos directamente a <a href="mailto:inconformistas.radiovillalba@gmail.com">inconformistas.radiovillalba@gmail.com</a></p>'+
