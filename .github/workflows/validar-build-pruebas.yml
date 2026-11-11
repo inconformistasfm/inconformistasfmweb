@@ -1,39 +1,46 @@
-name: Validar build de Inconformistas FM
+name: Validar build de Inconformistas FM (solo pruebas)
 
 on:
   push:
     branches:
       - pruebas/accesibilidad-seo-rendimiento
-  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: validar-inconformistas-pruebas
+  cancel-in-progress: true
+
 jobs:
   build:
+    if: github.ref == 'refs/heads/pruebas/accesibilidad-seo-rendimiento'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Descargar exclusivamente la rama de pruebas
+        uses: actions/checkout@v4
+        with:
+          ref: refs/heads/pruebas/accesibilidad-seo-rendimiento
+          persist-credentials: false
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
+
       - name: Generar páginas y recursos
         run: node generar-galeria.js
-      - name: Comprobar páginas independientes
-        run: |
-          for page in index.html programas.html noticias.html equipo.html galeria.html artistas.html radio-online.html contacto.html; do
-            test -s "$page"
-            grep -q '<main id="main">' "$page"
-          done
-          test -s assets/generated/css
-          test -s assets/generated/js
-          test -s assets/generated/images
-      - name: Comprobar sintaxis JavaScript generado
+
+      - name: Validar SEO, accesibilidad básica, rutas y recursos
+        run: node scripts/verificar-build.js
+
+      - name: Comprobar sintaxis de todo el JavaScript generado
         run: |
           find assets/generated/js -type f -name '*.js' -print0 | xargs -0 -r -n1 node --check
-      - name: Resumen de tamaño
+
+      - name: Resumen de tamaños
         run: |
-          echo "HTML total:"
+          echo "Tamaño de las páginas HTML generadas:"
           wc -c index.html programas.html noticias.html equipo.html galeria.html artistas.html radio-online.html contacto.html
-          echo "Recursos compartidos:"
+          echo "Tamaño total de recursos generados:"
           du -sh assets/generated
