@@ -615,15 +615,19 @@
 #spotifyModal .ivoox-player{height:210px}
 @media(max-width:600px){#spotifyModal .ivoox-player{height:205px}}
 
-  /* Ajustes WCAG: se conservan fondos, formas y composición; se oscurecen solo textos. */
-  html body .hola,html body .hola>b{color:#2B1B3D!important}
-  html body #btnDirecto{color:#2B1B3D!important}
-  html body a[data-boton-principal="1"]{color:#2B1B3D!important}
-  :root>span,:root>div>a[onclick="return abrirIvoox(this.href)"]{color:#2B1B3D!important}
-  html body .cifras small,html body .anuncio-rock p,html body footer .wrap>small{color:#554465!important}
-  html body li>a[target="_blank"][rel="noopener"]{color:#6940C4!important}
-  html body a:not(.btn):not(.logo){color:#6940C4}
-  .titulo-anuncio{font-size:21px!important;line-height:1.02!important;font-weight:800!important;margin:0 0 8px!important}
+  /* Accesibilidad: se mantienen fondos, tamaños y composición; se mejora solo la legibilidad. */
+  .on{color:#24132f!important}
+  .hola,.hola>b,#btnDirecto,:root>span,:root>div>a[onclick="return abrirIvoox(this.href)"],.juanma-ficha .rol{color:#24132f!important}
+  .rosa,#fenviar,a[role="button"],.pc .escuchar,.pc .play.canal{color:#321421!important}
+  .pc .pc-num{color:#a51f39!important}
+  .uva{color:#24132f!important}
+  .fin>a{color:#fff!important}
+  .wrap>small{color:#fff!important}
+  :root>p,.antiguos p,li,.anuncio-rock p,.cifras small,.noticia-meta span,#faviso,.wrap small{color:#554465!important}
+  .enlaces>a,.fin a,.fin a:visited,li>a[target="_blank"][rel="noopener"],#faviso>a,p>a[target="_blank"][rel="noopener"],p>a{color:#503080!important}
+  .enlaces>a>small,a[target="_blank"][rel="noopener"]>small{color:#554465!important}
+  .anuncio-rock .titulo-anuncio{font-size:21px!important;line-height:1.02!important;font-weight:800!important;margin:0 0 8px!important}
+  .accesible-solo-lectores{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 </style>
 </head>
 <body>
@@ -647,7 +651,7 @@
 </nav>
 </div>
 </header>
-<main id="main"></main>
+<main id="main"><h1 class="accesible-solo-lectores">Inconformistas FM</h1></main>
 <!-- Reproductor persistente: permanece activo al cambiar de sección dentro de la web -->
 <div aria-live="polite" id="radioPersistente">
 <div class="radioPersistenteBar">
