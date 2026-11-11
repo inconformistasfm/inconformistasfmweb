@@ -51,7 +51,7 @@ const pages = [
   for (const item of results) {
     const serious = item.violations.filter(v => ['critical', 'serious'].includes(v.impact)).length;
     console.log(item.page + ': ' + item.violations.length + ' incidencias axe (' + serious + ' graves/críticas), ' + item.passes + ' comprobaciones superadas.');
-    for (const v of item.violations) console.log('  [' + v.impact + '] ' + v.id + ': ' + v.description);
+    for (const v of item.violations) { console.log('  [' + v.impact + '] ' + v.id + ': ' + v.description); for (const n of v.nodes) console.log('    SELECTOR ' + JSON.stringify(n.target) + ' | ' + String(n.summary || '').replace(/\s+/g, ' ').slice(0, 700)); }
     for (const e of item.javascriptErrors) console.log('  [JS] ' + e);
   }
   const seriousCount = results.reduce((n, p) => n + p.violations.filter(v => ['critical', 'serious'].includes(v.impact)).length, 0);
