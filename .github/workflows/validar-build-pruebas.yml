@@ -48,7 +48,7 @@ jobs:
       - name: Instalar herramientas de auditoría
         run: |
           npm install --no-save @lhci/cli playwright axe-core
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
 
       - name: Ejecutar auditorías Lighthouse y axe en las ocho páginas
         run: |
@@ -63,6 +63,15 @@ jobs:
           npx lhci autorun
           node scripts/auditar-accesibilidad.js
 
+      - name: Guardar informes de auditoría aunque haya errores
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: informes-auditoria-inconformistas
+          path: informes-auditoria/
+          if-no-files-found: warn
+          retention-days: 7
+
       - name: Resumen de auditorías
         if: always()
         run: |
@@ -73,6 +82,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Preparar paquete de vista previa para descargar
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: inconformistasfm-vista-previa
