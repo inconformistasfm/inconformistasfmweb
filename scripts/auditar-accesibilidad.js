@@ -21,7 +21,7 @@ const pages = [
       const page = await browser.newPage({ viewport: { width: 1365, height: 900 } });
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
-      await page.goto('http://127.0.0.1:4173/' + file, { waitUntil: 'networkidle' });
+      await page.goto('http://127.0.0.1:4173/' + file, { waitUntil: 'domcontentloaded' });
       await page.addScriptTag({ path: require.resolve('axe-core/axe.min.js') });
       const audit = await page.evaluate(async () => {
         const result = await axe.run(document, {
