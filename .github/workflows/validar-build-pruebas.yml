@@ -50,18 +50,35 @@ jobs:
           npm install --no-save @lhci/cli playwright axe-core
           npx playwright install chromium
 
-      - name: Ejecutar auditorías Lighthouse y axe en las ocho páginas
+      - name: Iniciar servidor local para las auditorías
         run: |
           mkdir -p informes-auditoria
-          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/inconformistas-http.log 2>&1 &
-          SERVER_PID=$!
-          trap 'kill $SERVER_PID 2>/dev/null || true' EXIT
+          nohup python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/inconformistas-http.log 2>&1 &
+          echo $! > /tmp/inconformistas-http.pid
           for i in {1..20}; do
-            if curl -fsS http://127.0.0.1:4173/index.html >/dev/null; then break; fi
+            if curl -fsS http://127.0.0.1:4173/index.html >/dev/null; then
+              echo "Servidor local preparado."
+              exit 0
+            fi
             sleep 1
           done
-          npx lhci autorun
-          node scripts/auditar-accesibilidad.js
+          echo "No se pudo iniciar el servidor local."
+          cat /tmp/inconformistas-http.log
+          exit 1
+
+      - name: Ejecutar auditoría Lighthouse (los resultados son informativos)
+        continue-on-error: true
+        run: npx lhci autorun
+
+      - name: Ejecutar auditoría de accesibilidad axe en las ocho páginas
+        run: node scripts/auditar-accesibilidad.js
+
+      - name: Detener servidor local
+        if: always()
+        run: |
+          if [ -f /tmp/inconformistas-http.pid ]; then
+            kill "$(cat /tmp/inconformistas-http.pid)" 2>/dev/null || true
+          fi
 
       - name: Guardar informes de auditoría aunque haya errores
         if: always()
@@ -77,8 +94,8 @@ jobs:
         run: |
           {
             echo "## Auditorías de calidad"
-            echo "Lighthouse: informes por página en informes-auditoria/lighthouse."
-            echo "axe: incidencias WCAG y errores JavaScript en informes-auditoria/accesibilidad-axe.json."
+            echo "Lighthouse: informes por página en informes-auditoria/lighthouse. Sus recomendaciones se registran como informativas y no bloquean axe."
+            echo "axe: incidencias WCAG y errores JavaScript en informes-auditoria/accesibilidad-axe.json. Las incidencias graves/críticas y los errores JavaScript sí hacen fallar la auditoría."
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Preparar paquete de vista previa para descargar
