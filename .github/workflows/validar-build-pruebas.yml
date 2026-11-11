@@ -44,3 +44,14 @@ jobs:
           wc -c index.html programas.html noticias.html equipo.html galeria.html artistas.html radio-online.html contacto.html
           echo "Tamaño total de recursos generados:"
           du -sh assets/generated
+
+      - name: Preparar paquete de vista previa para descargar
+        uses: actions/upload-artifact@v4
+        with:
+          name: inconformistasfm-vista-previa
+          path: |
+            **
+            !.git/**
+            !.github/**
+          if-no-files-found: error
+          retention-days: 7
