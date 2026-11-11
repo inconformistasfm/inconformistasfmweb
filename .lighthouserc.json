@@ -1,26 +1,45 @@
 {
   "ci": {
     "collect": {
-      "staticDistDir": ".",
       "url": [
-        "http://localhost:4173/index.html",
-        "http://localhost:4173/programas.html",
-        "http://localhost:4173/noticias.html",
-        "http://localhost:4173/equipo.html",
-        "http://localhost:4173/galeria.html",
-        "http://localhost:4173/artistas.html",
-        "http://localhost:4173/radio-online.html",
-        "http://localhost:4173/contacto.html"
+        "http://127.0.0.1:4173/index.html",
+        "http://127.0.0.1:4173/programas.html",
+        "http://127.0.0.1:4173/noticias.html",
+        "http://127.0.0.1:4173/equipo.html",
+        "http://127.0.0.1:4173/galeria.html",
+        "http://127.0.0.1:4173/artistas.html",
+        "http://127.0.0.1:4173/radio-online.html",
+        "http://127.0.0.1:4173/contacto.html"
       ],
       "numberOfRuns": 1
     },
     "assert": {
       "preset": "lighthouse:recommended",
       "assertions": {
-        "categories:performance": "off",
-        "categories:accessibility": "off",
-        "categories:seo": "off",
-        "categories:best-practices": "off"
+        "categories:performance": [
+          "warn",
+          {
+            "minScore": 0.5
+          }
+        ],
+        "categories:accessibility": [
+          "warn",
+          {
+            "minScore": 0.8
+          }
+        ],
+        "categories:seo": [
+          "warn",
+          {
+            "minScore": 0.8
+          }
+        ],
+        "categories:best-practices": [
+          "warn",
+          {
+            "minScore": 0.8
+          }
+        ]
       }
     },
     "upload": {
