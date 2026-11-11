@@ -45,6 +45,33 @@ jobs:
           echo "Tamaño total de recursos generados:"
           du -sh assets/generated
 
+      - name: Instalar herramientas de auditoría
+        run: |
+          npm install --no-save @lhci/cli playwright axe-core
+          npx playwright install --with-deps chromium
+
+      - name: Ejecutar auditorías Lighthouse y axe en las ocho páginas
+        run: |
+          mkdir -p informes-auditoria
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/inconformistas-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID 2>/dev/null || true' EXIT
+          for i in {1..20}; do
+            if curl -fsS http://127.0.0.1:4173/index.html >/dev/null; then break; fi
+            sleep 1
+          done
+          npx lhci autorun
+          node scripts/auditar-accesibilidad.js
+
+      - name: Resumen de auditorías
+        if: always()
+        run: |
+          {
+            echo "## Auditorías de calidad"
+            echo "Lighthouse: informes por página en informes-auditoria/lighthouse."
+            echo "axe: incidencias WCAG y errores JavaScript en informes-auditoria/accesibilidad-axe.json."
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Preparar paquete de vista previa para descargar
         uses: actions/upload-artifact@v4
         with:
