@@ -226,7 +226,7 @@ function pageFor(route) {
     'footer{background:#6536C8!important}footer small{opacity:1!important}' +
     'h2.a11y-visual-h3{font-size:21px!important;font-weight:800!important;line-height:1.02!important;letter-spacing:-.02em!important;margin:0 0 8px!important}' +
     '</style>';
-  doc = doc.replace(/<\\/head>/i, accessibilityCss + schema + '\\n</head>');
+  doc = doc.replace(/<\/head>/i, accessibilityCss + schema + '\n</head>');
   return doc;
 }
 
