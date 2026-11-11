@@ -1911,6 +1911,18 @@ document.getElementById("burger").addEventListener("click",function(){
   var m=document.getElementById("menu"),ab=m.classList.toggle("abierto");
   this.setAttribute("aria-expanded",ab?"true":"false");
 });
+// Navegación interna sin recargar: conserva la URL limpia y actualiza la sección.
+document.addEventListener("click",function(e){
+  var a=e.target.closest('nav.menu a, a.logo');
+  if(!a || e.defaultPrevented || e.button!==0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)return;
+  var destino=new URL(a.getAttribute("href"),location.origin);
+  if(destino.origin!==location.origin)return;
+  e.preventDefault();
+  if(location.pathname!==destino.pathname || location.hash){
+    history.pushState({}, "", destino.pathname);
+    pintar();
+  }
+});
 window.addEventListener("hashchange",pintar);
 window.addEventListener("popstate",pintar);
 if(!location.hash && location.pathname==="/") location.replace("#/inicio");
