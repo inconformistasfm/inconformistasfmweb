@@ -196,7 +196,7 @@ function pageFor(route) {
   }) + '</script>';
   // La accesibilidad se corrige en el HTML original, para que los cambios
   // sigan presentes también cuando el router vuelve a pintar la sección.
-  doc = doc.replace(/<\\/head>/i, schema + '\\n</head>');
+  doc = doc.replace(/<\/head>/i, schema + '\n</head>');
   return doc;
 }
 
