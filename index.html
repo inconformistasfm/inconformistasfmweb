@@ -1891,7 +1891,7 @@ function pintar(){
   var r=ruta();
   document.getElementById("main").innerHTML=vistas[r]();
   var a=document.querySelectorAll("nav.menu a");
-  for(var i=0;i<a.length;i++){var href=(a[i].getAttribute("href")||"").replace(/^#\/?/,"");a[i].classList.toggle("on",(href.split("?")[0]||"inicio")===r);}
+  for(var i=0;i<a.length;i++){var href=(a[i].getAttribute("href")||"").replace(/^#\/?/,"").replace(/^\/+/, "");href=href==="radio-online"?"radio":(href==="artistas"?"colaboradores":href);a[i].classList.toggle("on",(href.split("?")[0]||"inicio")===r);}
   actualizarSEO(r);
   document.getElementById("menu").classList.remove("abierto");
   document.getElementById("burger").setAttribute("aria-expanded","false");
