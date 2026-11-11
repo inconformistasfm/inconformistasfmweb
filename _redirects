@@ -1,0 +1,15 @@
+# Rutas limpias para las secciones públicas de Inconformistas FM.
+/programas /index.html 200
+/programas/ /index.html 200
+/noticias /index.html 200
+/noticias/ /index.html 200
+/equipo /index.html 200
+/equipo/ /index.html 200
+/galeria /index.html 200
+/galeria/ /index.html 200
+/artistas /index.html 200
+/artistas/ /index.html 200
+/radio-online /index.html 200
+/radio-online/ /index.html 200
+/contacto /index.html 200
+/contacto/ /index.html 200
