@@ -14,7 +14,6 @@
       "numberOfRuns": 1
     },
     "assert": {
-      "preset": "lighthouse:recommended",
       "assertions": {
         "categories:performance": [
           "warn",
