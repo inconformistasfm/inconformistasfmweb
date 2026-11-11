@@ -108,7 +108,7 @@ function renderViews(htmlSource) {
     sessionStorage: { getItem: function () { return null; }, setItem: noop, removeItem: noop },
     setTimeout: function () { return 1; }, clearTimeout: noop, setInterval: function () { return 1; }, clearInterval: noop,
     requestAnimationFrame: noop, cancelAnimationFrame: noop,
-    fetch: function () { return Promise.resolve({ ok: false, json: function () { return Promise.resolve({}); }, text: function () { return Promise.resolve(''); }); },
+    fetch: function () { return Promise.resolve({ ok: false, json: function () { return Promise.resolve({}); }, text: function () { return Promise.resolve(''); } }); },
     Image: function () { return element('image:' + elements.size); }, Audio: function () { return element('audio:' + elements.size); },
     URL: URL, URLSearchParams: URLSearchParams, Event: function () {}, CustomEvent: function () {},
     console: { log: noop, warn: noop, error: noop }, performance: { now: function () { return 0; } }
