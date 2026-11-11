@@ -129,25 +129,6 @@ function renderViews(htmlSource) {
       markup = markup.replace(/(<ul\b[^>]*id="lista"[^>]*>)[\s\S]*?(<\/ul>)/i, function (all, open, close) { return open + list + close; });
       markup = markup.replace(/(<p\b[^>]*id="contador"[^>]*>)[\s\S]*?(<\/p>)/i, function (all, open, close) { return open + counter + close; });
     }
-    // Corrige saltos semánticos de encabezados sin alterar su presentación.
-    let lastHeadingLevel = 0;
-    const headingStack = [];
-    markup = markup.replace(/<\/?h[1-6]\b[^>]*>/gi, function (tag) {
-      const closing = /^<\//.test(tag);
-      if (closing) {
-        const previous = headingStack.pop();
-        return '</h' + (previous || 2) + '>';
-      }
-      const match = tag.match(/^<h([1-6])\b([^>]*)>/i);
-      const originalLevel = Number(match[1]);
-      const level = lastHeadingLevel && originalLevel > lastHeadingLevel + 1
-        ? lastHeadingLevel + 1 : originalLevel;
-      lastHeadingLevel = level;
-      headingStack.push(level);
-      let attrs = match[2] || '';
-      if (level !== originalLevel && originalLevel === 3 && level === 2) attrs += ' class="a11y-visual-h3"';
-      return '<h' + level + attrs + '>';
-    });
     result[route.key] = markup;
     console.log('Vista prerenderizada: ' + route.path + ' (' + markup.length + ' caracteres)');
   }
@@ -213,20 +194,9 @@ function pageFor(route) {
     'inLanguage': 'es',
     'isPartOf': { '@type': 'WebSite', 'name': 'Inconformistas FM', 'url': 'https://inconformistasfm.es/' }
   }) + '</script>';
-  // Ajustes WCAG puntuales: se conserva la paleta y la composición; solo se
-  // corrigen contrastes de texto y el nombre accesible del logotipo.
-  doc = doc.replace(/<a\\b([^>]*class="logo"[^>]*)>/i, function (tag, attrs) {
-    return '<a' + attrs.replace(/\\saria-label="[^"]*"/i, '') + '>';
-  });
-  const accessibilityCss = '<style>' +
-    '.hola{color:#2B1B3D!important}' +
-    '.marca-nombre{color:#2B1B3D!important}' +
-    '.freq{color:#FFF6E9!important}.freq small{color:#fff!important}' +
-    '#btnDirecto{background:#C92F49!important;color:#fff!important}' +
-    'footer{background:#6536C8!important}footer small{opacity:1!important}' +
-    'h2.a11y-visual-h3{font-size:21px!important;font-weight:800!important;line-height:1.02!important;letter-spacing:-.02em!important;margin:0 0 8px!important}' +
-    '</style>';
-  doc = doc.replace(/<\/head>/i, accessibilityCss + schema + '\n</head>');
+  // La accesibilidad se corrige en el HTML original, para que los cambios
+  // sigan presentes también cuando el router vuelve a pintar la sección.
+  doc = doc.replace(/<\\/head>/i, schema + '\\n</head>');
   return doc;
 }
 
