@@ -2019,6 +2019,13 @@ pintar();
     'Este sábado 14 de noviembre a las 19:30h nos visita en Inconformistas FM la artista Tinaisa para presentarnos «Baby Boo», su recién estrenado sencillo. Un tema lleno de energía que fusiona afrobeat y afropop contemporáneo con una producción de primer nivel a cargo de Dabruk. Hablaremos con ella sobre su trayectoria, el proceso creativo detrás de este lanzamiento y todo lo que viene.',
     'Sintonízanos en el 107.4 FM (Radio Villalba) o escúchanos en directo desde la web en inconformistasfm.es. ¡No te lo pierdas!'
   ];
+  /* El sábado 14/11/2026 (desde las 00:00, hora peninsular) la noticia pasa a decir «Hoy». */
+  var HOY_TINAISA = new Date("2026-11-14T00:00:00+01:00");
+  var PARRAFOS_HOY = [
+    '¡Hoy el ritmo afrobeat y afropop con Tinaisa!',
+    'Hoy sábado 14 de noviembre a las 19:30h nos visita en Inconformistas FM la artista Tinaisa para presentarnos «Baby Boo», su recién estrenado sencillo. Un tema lleno de energía que fusiona afrobeat y afropop contemporáneo con una producción de primer nivel a cargo de Dabruk. Hablaremos con ella sobre su trayectoria, el proceso creativo detrás de este lanzamiento y todo lo que viene.',
+    'Sintonízanos en el 107.4 FM (Radio Villalba) o escúchanos en directo desde la web en inconformistasfm.es. ¡No te lo pierdas!'
+  ];
   var ESTILO_P = 'margin:0 0 8px;color:var(--suave);line-height:1.45';
   function aplicar(){
     var principal=document.querySelector('.anuncio-rock');
@@ -2029,13 +2036,14 @@ pintar();
     if(img.getAttribute('src')!==FOTO){img.src=FOTO; img.alt='Portada del sencillo «Baby Boo» de Tinaisa';}
     img.style.cssText='display:block;width:100%;max-width:130px;height:auto;object-fit:contain;border:0;border-radius:0';
     var texto=h.parentElement;
+    var TEXTO=(new Date()>=HOY_TINAISA)?PARRAFOS_HOY:PARRAFOS;
     var ps=texto.querySelectorAll('p');
-    while(ps.length<PARRAFOS.length){var p=document.createElement('p'); texto.appendChild(p); ps=texto.querySelectorAll('p');}
-    for(var i=0;i<PARRAFOS.length;i++){
-      if(ps[i].innerHTML!==PARRAFOS[i]) ps[i].innerHTML=PARRAFOS[i];
+    while(ps.length<TEXTO.length){var p=document.createElement('p'); texto.appendChild(p); ps=texto.querySelectorAll('p');}
+    for(var i=0;i<TEXTO.length;i++){
+      if(ps[i].innerHTML!==TEXTO[i]) ps[i].innerHTML=TEXTO[i];
       if(ps[i].getAttribute('style')!==ESTILO_P) ps[i].setAttribute('style',ESTILO_P);
     }
-    for(var j=PARRAFOS.length;j<ps.length;j++) ps[j].remove();
+    for(var j=TEXTO.length;j<ps.length;j++) ps[j].remove();
     var etiqueta=texto.querySelector('span'); if(etiqueta && etiqueta.textContent!=='ENTREVISTA') etiqueta.textContent='ENTREVISTA';
     var contador=texto.querySelector('#contador-dias-rock'); if(contador) contador.remove();
     Array.prototype.forEach.call(principal.querySelectorAll('.escuchar-rock-programado'),function(e){e.remove();});
@@ -2205,13 +2213,18 @@ pintar();
 })();
 </script>
 <script>
-/* Botón de la noticia principal (Escuchar en directo) + programa 281 (De Arte Flamenco). */
+/* Botón de la noticia principal (Escuchar en directo) + programa 281 (De Arte Flamenco)
+   + sábado 14/11/2026 a las 20:30: el botón pasa a «Escuchar» (reproductor iVoox) y se añade el programa 282 (Tinaisa). */
 (function(){
   var INICIO = new Date("2026-11-07T00:00:00+01:00");
   var EMISION = new Date("2026-11-07T20:30:00+01:00");
   var IVOOX = "https://www.ivoox.com/player_ej_183380889_6_1.html?c1=cb2650";
   var TITULO = "ENTREVISTA A DE ARTE FLAMENCO";
   var agregado = false;
+  var EMISION_TINAISA = new Date("2026-11-14T20:30:00+01:00");
+  var IVOOX_TINAISA = "https://www.ivoox.com/player_ej_183749601_6_1.html?c1=cb2650";
+  var TITULO_TINAISA = "Entrevista a Tinaisa 14/11/2026";
+  var agregado282 = false;
 
   function botonNoticia(contenedor){
     if(contenedor.querySelector('[data-boton-principal="1"]')) return;
@@ -2219,13 +2232,25 @@ pintar();
     a.setAttribute('data-boton-principal','1');
     a.className='btn rosa';
     a.href='#';
-    a.textContent='▶ Escuchar en directo';
+    a.textContent=(new Date()>=EMISION_TINAISA)?'▶ Escuchar':'▶ Escuchar en directo';
     a.style.cssText='display:inline-flex;margin-top:12px;align-items:center;justify-content:center';
     a.addEventListener('click',function(ev){
       ev.preventDefault();
+      if(new Date()>=EMISION_TINAISA){
+        if(typeof window.abrirIvoox==='function') window.abrirIvoox(IVOOX_TINAISA);
+        return;
+      }
       if(typeof window.iniciarRadio==='function') window.iniciarRadio();
     });
     contenedor.appendChild(a);
+  }
+
+  /* A las 20:30 del 14/11/2026 el botón ya existente cambia solo, sin recargar la página. */
+  function ajustarBotonNoticia(contenedor){
+    var a=contenedor.querySelector('[data-boton-principal="1"]');
+    if(!a) return;
+    var texto=(new Date()>=EMISION_TINAISA)?'▶ Escuchar':'▶ Escuchar en directo';
+    if(a.textContent!==texto) a.textContent=texto;
   }
 
   function actualizarPrincipal(){
@@ -2234,6 +2259,7 @@ pintar();
     var h=principal.querySelector('h3');
     if(!h) return;
     botonNoticia(h.parentElement);
+    ajustarBotonNoticia(h.parentElement);
   }
 
   function limpiarNumerosNoticias(){
@@ -2253,6 +2279,19 @@ pintar();
     actualizarContador();
   }
 
+  function agregarPrograma282(ahora){
+    if(ahora<EMISION_TINAISA || agregado282 || !Array.isArray(window.P)) return;
+    if(!window.P.some(function(p){return Number(p[0])===282;})){
+      window.P.unshift([282,TITULO_TINAISA,IVOOX_TINAISA,null,null,null]);
+    }
+    agregado282=true;
+    if(typeof window.pintarProgramas==='function'){
+      var q=document.getElementById('q');
+      window.pintarProgramas(q?q.value:'');
+    }
+    actualizarContador();
+  }
+
   function actualizarContador(){
     var cifra=document.querySelector('.cifras div b');
     if(cifra && Array.isArray(window.P)) cifra.textContent=String(window.P.length);
@@ -2263,6 +2302,7 @@ pintar();
     actualizarPrincipal();
     limpiarNumerosNoticias();
     agregarPrograma281(ahora);
+    agregarPrograma282(ahora);
     actualizarContador();
   }
 
