@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<base href="/"/>
+<title>Fotos del programa · Inconformistas FM</title>
+<meta content="Fotos de un programa de Inconformistas FM." name="description"/>
+<link href="https://inconformistasfm.es/fotosprograma/" rel="canonical"/>
+<meta content="noindex,follow" name="robots"/>
+<meta content="Inconformistas FM" name="author"/>
+<meta content="#FFF6E9" name="theme-color"/>
+<meta content="website" property="og:type"/>
+<meta content="Fotos del programa · Inconformistas FM" property="og:title"/>
+<meta content="Fotos de un programa de Inconformistas FM." property="og:description"/>
+<meta content="https://inconformistasfm.es/fotosprograma/" property="og:url"/>
+<meta content="Inconformistas FM" property="og:site_name"/>
+<meta content="summary" name="twitter:card"/>
+
+
+<link href="/favicon.ico" rel="icon" sizes="any"/>
+<link href="/favicon-48x48.png" rel="icon" sizes="48x48" type="image/png"/>
+<link href="/favicon.png" rel="icon" sizes="192x192" type="image/png"/>
+<link href="/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800;9..144,900&amp;family=Karla:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="/assets/estilos.css?v=2750a5dc" rel="stylesheet"/>
+</head>
+<body>
+<header class="top">
+<div class="wrap topin">
+<a aria-label="Inconformistas FM, inicio" class="logo" href="/">
+<img alt="Inconformistas FM" src="/img/logo.png"/>
+<span class="lema">Radio Villalba<br/>107.4 FM</span>
+</a>
+<button aria-controls="menu" aria-expanded="false" class="burger" id="burger">Menú</button>
+<nav aria-label="Secciones" class="menu" id="menu">
+<a href="/">Inicio</a>
+<a href="/programas/">Programas</a>
+<a href="/noticias/">Noticias</a>
+<a href="/equipo/">Equipo</a>
+<a href="/galeria/">Galería</a>
+<a href="/colaboradores/">Artistas</a>
+<a href="/radio/">Radio online</a>
+<a href="/contacto/">Contacto</a>
+</nav>
+</div>
+</header>
+<main id="main"><section class="seccion"><div class="wrap"><h1>Fotos del programa</h1><p class="intro">Fotos del programa.</p></div></section></main>
+<!-- Reproductor persistente: permanece activo al cambiar de sección dentro de la web -->
+<div aria-live="polite" id="radioPersistente">
+<div class="radioPersistenteBar">
+<div class="radioPersistenteInfo">
+<span class="radioDot"></span>
+<strong id="radioEstado">Radio Villalba · 107.4 FM</strong>
+<small>La emisión continúa aunque cambies de sección</small>
+</div>
+<button aria-label="Cerrar reproductor" class="radioCerrar" onclick="cerrarRadio()" title="Cerrar radio" type="button">×</button>
+</div>
+<audio controls="" id="radioAudio" playsinline="" preload="none"></audio>
+</div>
+<footer>
+<div class="wrap">
+<div class="fin">
+<a href="https://inconformistasfm.blogspot.com/" rel="noopener" target="_blank">Blog antiguo</a>
+<a href="https://www.ivoox.com/podcast-inconformistas-fm_sq_f166496_1.html" rel="noopener" target="_blank">iVoox</a>
+<a href="https://www.youtube.com/user/Inconformistasfm" rel="noopener" target="_blank">YouTube</a>
+<a href="https://twitter.com/Inconformistas_" rel="noopener" target="_blank">X / Twitter</a>
+<a href="https://www.facebook.com/profile.php?id=100001375665552" rel="noopener" target="_blank">Facebook</a>
+<a href="https://open.spotify.com/show/033ZIDvFkeMDc9u050J6yr" rel="noopener" target="_blank">Spotify</a>
+<a href="mailto:inconformistas.radiovillalba@gmail.com">Escríbenos</a>
+</div>
+<small>Inconformistas FM · Radio Villalba 107.4 FM · Centro Cultural Peñalba, Collado Villalba. Todos los derechos registrados.</small>
+</div>
+</footer>
+<div aria-hidden="true" class="ivoox-modal" id="ivooxModal" onclick="cerrarIvoox(event)">
+<div aria-label="Reproductor iVoox" aria-modal="true" class="ivoox-caja" onclick="event.stopPropagation();" role="dialog">
+<button aria-label="Cerrar reproductor" class="ivoox-cerrar" onclick="cerrarIvoox()" type="button">×</button>
+<iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" class="ivoox-player" id="ivooxPlayer" loading="lazy" src="about:blank" title="Reproductor iVoox"></iframe>
+</div>
+</div>
+<div aria-hidden="true" class="ivoox-modal" id="spotifyModal" onclick="cerrarSpotify(event)">
+<div aria-label="Reproductor Spotify" aria-modal="true" class="ivoox-caja" onclick="event.stopPropagation();" role="dialog">
+<button aria-label="Cerrar reproductor Spotify" class="ivoox-cerrar" onclick="cerrarSpotify()" type="button">×</button>
+<iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" class="ivoox-player" id="spotifyPlayer" loading="lazy" src="about:blank" title="Reproductor Spotify"></iframe>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="/assets/app.js?v=2750a5dc"></script>
+</body>
+</html>
