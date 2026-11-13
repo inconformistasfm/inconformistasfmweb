@@ -1,0 +1,44 @@
+name: Actualizar sitemap
+
+# Cada vez que cambias una página o la web (app.js/estilos), pone en sitemap.xml
+# la fecha de hoy en todas las secciones. También se puede lanzar a mano desde
+# Actions > Actualizar sitemap > Run workflow.
+on:
+  push:
+    branches: [main, master]
+    paths: ['index.html', '*/index.html', 'assets/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sitemap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generar sitemap.xml con la fecha de hoy
+        run: |
+          FECHA=$(date -u +%F)
+          {
+            echo '<?xml version="1.0" encoding="UTF-8"?>'
+            echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+            for RUTA in "" programas/ noticias/ equipo/ galeria/ colaboradores/ radio/ contacto/ madrinas/; do
+              echo "  <url>"
+              echo "    <loc>https://inconformistasfm.es/${RUTA}</loc>"
+              echo "    <lastmod>${FECHA}</lastmod>"
+              echo "  </url>"
+            done
+            echo '</urlset>'
+          } > sitemap.xml
+
+      - name: Guardar el cambio si hay novedad
+        run: |
+          if ! git diff --quiet sitemap.xml; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add sitemap.xml
+            git commit -m "Actualizar fecha del sitemap"
+            git push
+          fi

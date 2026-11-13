@@ -567,3 +567,9 @@
 /* Reproductor Spotify: mismo tamaño que el reproductor iVoox. */
 #spotifyModal .ivoox-player{height:210px}
 @media(max-width:600px){#spotifyModal .ivoox-player{height:205px}}
+
+.enviado-fondo{position:fixed;inset:0;z-index:9999;background:rgba(43,27,61,.55);display:flex;align-items:center;justify-content:center;padding:20px}
+.enviado-caja{background:var(--papel);border:3px solid var(--tinta);border-radius:22px;box-shadow:var(--dura);padding:30px 28px;max-width:380px;width:100%;text-align:center}
+.enviado-caja h3{font-family:"Fraunces",Georgia,serif;font-size:28px;margin:10px 0 6px;color:var(--tinta)}
+.enviado-caja p{margin:0 0 18px;color:var(--suave);font-size:17px}
+.enviado-ico{width:64px;height:64px;line-height:64px;margin:0 auto;border-radius:50%;background:var(--turquesa);color:#fff;font-size:36px;font-weight:700;border:3px solid var(--tinta)}

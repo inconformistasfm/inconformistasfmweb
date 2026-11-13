@@ -696,7 +696,7 @@ function montarFormulario(){
     var params={name:n||"No indicado",email:e,title:asunto,message:m,time:new Date().toLocaleString("es-ES")};
     emailjs.send("service_th709xi","template_ctrkbfo",params,{publicKey:"lCm5mkNthLNbSYUUw"})
       .then(function(){
-        aviso.innerHTML="<b>Mensaje enviado correctamente.</b> Gracias por escribirnos.";
+        aviso.innerHTML="<b>Mensaje enviado correctamente.</b> Gracias por escribirnos.";mostrarMensajeEnviado();
         document.getElementById("fnombre").value="";
         document.getElementById("femail").value="";
         document.getElementById("fasunto").value="";
@@ -1651,3 +1651,12 @@ pintar();
   });
   window.addEventListener("popstate",ir);
 })();
+
+function mostrarMensajeEnviado(){
+  var v=document.createElement("div");v.className="enviado-fondo";v.setAttribute("role","alertdialog");v.setAttribute("aria-live","assertive");
+  v.innerHTML='<div class="enviado-caja"><div class="enviado-ico" aria-hidden="true">&#10003;</div><h3>¡Mensaje enviado!</h3><p>Hemos recibido tu mensaje. Gracias por escribirnos.</p><button type="button" class="btn rosa">Aceptar</button></div>';
+  function cerrar(){if(v.parentNode)v.parentNode.removeChild(v);}
+  v.addEventListener("click",function(e){if(e.target===v||e.target.tagName==="BUTTON")cerrar();});
+  document.body.appendChild(v);setTimeout(cerrar,8000);
+  var bt=v.querySelector("button");if(bt)bt.focus();
+}
