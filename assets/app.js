@@ -1305,7 +1305,7 @@ pintar();
       card.dataset.ordenPortada=clave;
       card.style.cssText='background:var(--papel);border:1px solid var(--borde, var(--tinta));border-radius:18px;padding:20px;box-shadow:0 6px 20px rgba(0,0,0,.07);min-width:0;display:flex;flex-direction:column';
       var img=document.createElement('img'); img.src=imagen; img.alt=alt; img.style.cssText='display:block;width:100%;height:160px;object-fit:contain;object-position:center;border-radius:12px;border:1px solid var(--tinta);background:var(--fondo);margin-bottom:14px'; card.appendChild(img);
-      var tag=document.createElement('span'); tag.textContent=etiqueta; tag.style.cssText='display:inline-block;align-self:flex-start;color:#fff;font-weight:700;font-size:10px;padding:3px 8px;border-radius:20px;margin:0 0 8px;background:var(--turquesa)'; card.appendChild(tag);
+      if(etiqueta){ var tag=document.createElement('span'); tag.textContent=etiqueta; tag.style.cssText='display:inline-block;align-self:flex-start;color:#fff;font-weight:700;font-size:10px;padding:3px 8px;border-radius:20px;margin:0 0 8px;background:var(--turquesa)'; card.appendChild(tag); }
       var h=document.createElement('h3'); h.textContent=titulo; h.style.cssText='font-size:18px;line-height:1.35;margin:0 0 12px;font-weight:700'; card.appendChild(h);
       var p=document.createElement('p'); p.textContent=descripcion; p.style.cssText='margin:0 0 14px;color:var(--suave);font-size:14px;line-height:1.65'; card.appendChild(p);
       var zona=document.createElement('div'); zona.style.cssText='margin-top:auto;padding-top:16px';
@@ -1313,7 +1313,7 @@ pintar();
       return card;
     }
     var halloween=crear('halloween','Especial Halloween','PROGRAMA ESPECIAL','https://raw.githubusercontent.com/inconformistasfm/inconformistasfmweb/main/fotos-programas/280/watermarked_img_7616198293509931508.jpg','Cartel del Especial Halloween','Un programa especial con Gustavo Adolfo Bécquer, Don Juan Tenorio y una historia que pudo o no pasar.','https://www.ivoox.com/player_ej_182802536_6_1.html?c1=cb2650');
-    var bandas=crear('bandas','Bandas de rock que cambiaron su formación','ÚLTIMO PROGRAMA','https://raw.githubusercontent.com/inconformistasfm/inconformistasfmweb/main/fotos-programas/279/portada.jpg','Cartel del programa Bandas de rock','En Inconformistas FM hablamos de bandas de rock que han cambiado su composición durante su carrera, como Nightwish, Metallica, AC/DC, Black Sabbath, Pink Floyd y Mägo de Oz.','https://www.ivoox.com/player_ej_182637950_6_1.html?c1=cb2650');
+    var bandas=crear('bandas','Bandas de rock que cambiaron su formación','','https://raw.githubusercontent.com/inconformistasfm/inconformistasfmweb/main/fotos-programas/279/portada.jpg','Cartel del programa Bandas de rock','En Inconformistas FM hablamos de bandas de rock que han cambiado su composición durante su carrera, como Nightwish, Metallica, AC/DC, Black Sabbath, Pink Floyd y Mägo de Oz.','https://www.ivoox.com/player_ej_182637950_6_1.html?c1=cb2650');
     var flamenco=window.FOTO_DE_ARTE_FLAMENCO ? crear('flamenco','Entrevista a De Arte Flamenco','ENTREVISTA',window.FOTO_DE_ARTE_FLAMENCO,'Cartel de la entrevista a De Arte Flamenco','El duende, el compás y el sentimiento de la música flamenca llegaron a nuestros micrófonos de la mano de De Arte Flamenco, que además nos sorprendió con alguno de sus temas en directo.','https://www.ivoox.com/player_ej_183380889_6_1.html?c1=cb2650') : null;
     var anterior=null;
     [flamenco,halloween,bandas].forEach(function(card){
