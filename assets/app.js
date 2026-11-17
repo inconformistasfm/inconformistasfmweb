@@ -12,184 +12,39 @@ var RECURSOS_CARGADOS=false;
 var MAX_RECURSOS=50;
 
 
-/* [nº, título, enlace directo de iVoox, audio antiguo] */
-var P=[
-[278,"Programa especial dedicado a Lorca","https://www.ivoox.com/player_ej_182314980_6_1.html?c1=cb2650",null,null,null],
-[277,"La Década Prodigiosa","https://go.ivoox.com/rf/181945402",null,"https://inconformistasfm.blogspot.com/","https://open.spotify.com/episode/4ecFlJzocViJlGWyP9pGQX?si=G15o8wikRrq7ofNJbETlbw"],
-[276,"Esther Williams","https://www.ivoox.com/entrevista-esther-williams-03-10-2026-audios-mp3_rf_181576456_1.html",null,null,"https://open.spotify.com/episode/1UjzpZ6bX7kRBqYuyj9o9Q"],  [275,"Opinión del ataque de EEUU a Venezuela",null,null,"https://inconformistasfm.blogspot.com/2026/01/opinion-del-ataque-de-eeuu-venezuela.html"],
-[274,"Despertar la creatividad desde dentro — Entrevista con Tamara Chenel de Bambalinas","https://www.ivoox.com/tamara-chenel-bambalinas-inconformistas-fm-audios-mp3_rf_158332358_1.html",null,"https://inconformistasfm.blogspot.com/2025/09/despertar-la-creatividad-desde-dentro.html"],[273,"Luback","https://www.ivoox.com/entrevista-a-luback-audios-mp3_rf_48080667_1.html"],[272,"Entrevista a Capitán Cobarde","https://www.ivoox.com/entrevista-a-capitan-cobarde-audios-mp3_rf_78508514_1.html",null,"https://inconformistasfm.blogspot.com/2021/11/entrevista-capitan-cobarde.html"],[271,"Entrevista a Maldito Murphy","https://www.ivoox.com/entrevista-a-maldito-murphy-audios-mp3_rf_78267805_1.html",null,"https://inconformistasfm.blogspot.com/2021/11/entrevista-maldito-murphy.html"],[270,"Entrevista a Tony Carmona","https://www.ivoox.com/entrevista-a-tony-carmona-audios-mp3_rf_77161772_1.html",null,"2021-10","https://inconformistasfm.blogspot.com/2021/10/entrevista-tony-carmona.html"],[269,"Entrevista a El Niño Erizo","https://www.ivoox.com/entrevista-a-el-nino-erizo-audios-mp3_rf_76531999_1.html",null,"https://inconformistasfm.blogspot.com/2021/10/entrevista-el-nino-erizo.html"],[268,"Rap.... Mi mundo es el Rap","https://www.ivoox.com/programa-especial-rap-audios-mp3_rf_75526772_1.html",null,"https://inconformistasfm.blogspot.com/2021/09/rap-mi-mundo-es-el-rap.html"],[267,"El mejor Rock de la Historia","https://www.ivoox.com/rock-audios-mp3_rf_57013268_1.html",null,"https://inconformistasfm.blogspot.com/2020/09/el-mejor-rock-de-la-historia.html"],[266,"Empezamos la temporada 10!!!","https://www.ivoox.com/nueva-temporada-audios-mp3_rf_56545717_1.html",null,"https://inconformistasfm.blogspot.com/2020/09/empezamos-la-temporada-10.html"],[265,"From 92","https://www.ivoox.com/entrevista-a-from-92-audios-mp3_rf_47464787_1.html"],[264,"Asociación Mayores por la Educación Permanente","https://www.ivoox.com/entrevista-a-asociacion-mayores-educacion-permanente-audios-mp3_rf_45143910_1.html"],[263,"Ramón Castellanos y Carolina Pérez","https://www.ivoox.com/entrevista-a-ramon-castellanos-carolina-perez-audios-mp3_rf_44330767_1.html"],[262,"Elena Ley","https://www.ivoox.com/entrevista-a-elena-ley-audios-mp3_rf_44045102_1.html"],[261,"The Night Animal","https://www.ivoox.com/entrevista-a-the-night-animal-audios-mp3_rf_43539275_1.html"],[260,"Natali Castillo","https://www.ivoox.com/entrevista-a-natali-castillo-audios-mp3_rf_43230902_1.html"],[259,"Jorge Dylan","https://www.ivoox.com/entrevista-a-jorge-dylan-audios-mp3_rf_42954806_1.html"],[258,"Erre Violet","https://www.ivoox.com/entrevista-a-erre-violet-audios-mp3_rf_41680655_1.html"],[257,"Sidonie","https://www.ivoox.com/entrevista-a-sidonie-audios-mp3_rf_38326936_1.html"],[256,"Fiestas de Santiago Apóstol","https://www.ivoox.com/especial-fiestas-santiago-apostol-2019-audios-mp3_rf_38080819_1.html"],[255,"Javier Labadie","https://www.ivoox.com/entrevista-a-javier-lebadie-audios-mp3_rf_37368184_1.html"],[254,"Sinestrees y Lucía Pérez","https://www.ivoox.com/entrevista-a-sinestress-lucia-perez-audios-mp3_rf_35947626_1.html"],[253,"Sechem","https://www.ivoox.com/entrevista-a-sechem-audios-mp3_rf_35754513_1.html"],[252,"Ego Maniac","https://www.ivoox.com/entrevista-ego-maniacs-audios-mp3_rf_34413344_1.html"],[251,"Aldeas Infantiles","https://www.ivoox.com/entrevista-a-aldeas-infantiles-audios-mp3_rf_33203613_1.html"],[250,"Aldeas Infantiles · Educación de calle","https://www.ivoox.com/educacion-calle-aldeas-infantiles-sos-audios-mp3_rf_32369310_1.html"],[249,"Nana Aby","https://www.ivoox.com/entrevista-a-nana-aby-tributo-a-amy-winehouse-audios-mp3_rf_31566235_1.html"],[248,"Kinnia","https://www.ivoox.com/entrevista-a-kinnia-audios-mp3_rf_30266639_1.html"],[247,"Deborandos","https://www.ivoox.com/entrevista-a-deborandos-especial-rock-audios-mp3_rf_30105379_1.html"],[246,"Ocelon","https://www.ivoox.com/entrevista-a-ocelon-audios-mp3_rf_29953943_1.html"],[245,"Nacho Campillo y Asociación Vecinal Collado Villalba","https://www.ivoox.com/entrevista-a-nacho-campillo-asociacion-vecinal-de-audios-mp3_rf_29472643_1.html"],[244,"Los 70","https://www.ivoox.com/programa-especial-70-audios-mp3_rf_29096415_1.html"],[243,"Nana Aby y Miguel Yera","https://www.ivoox.com/entrevista-a-nana-aby-miguel-yera-audios-mp3_rf_28568361_1.html"],[242,"María Aguado","https://www.ivoox.com/entrevista-a-maria-aguado-inconformistas-fm-audios-mp3_rf_27054871_1.html"],[241,"Mister Jota","https://www.ivoox.com/entrevista-a-mister-jota-audios-mp3_rf_26910178_1.html"],[240,"Unique","https://www.ivoox.com/entrevista-a-unique-audios-mp3_rf_26561475_1.html"],[239,"Mariela Köhn","https://www.ivoox.com/entrevista-a-mariella-kohn-audios-mp3_rf_26434937_1.html"],[238,"Nana Aby","https://www.ivoox.com/entrevista-a-nana-aby-concierto-collado-villalba-audios-mp3_rf_26056866_1.html"],[237,"Rompeolas","https://www.ivoox.com/entrevista-a-rompeolas-tributo-a-loquillo-audios-mp3_rf_25932942_1.html"],[236,"Asociación Esclerosis Múltiple Collado Villalba","https://www.ivoox.com/entrevista-a-asociacion-esclerosis-multiple-de-audios-mp3_rf_25538538_1.html"],[235,"Isabel Soyo y Conciertos Solidarios","https://www.ivoox.com/entrevista-a-isabel-soto-conciertos-solidarios-audios-mp3_rf_25155619_1.html"],[234,"Rebbeca Newey","https://www.ivoox.com/entrevista-a-rebecca-newey-audios-mp3_rf_24573818_1.html"],[233,"Eugenio Gurumeta","https://www.ivoox.com/entrevista-a-eugenio-gurumeta-audios-mp3_rf_24186861_1.html"],[232,"Elena Mikailova","https://www.ivoox.com/entrevista-a-elena-mikailova-audios-mp3_rf_23671854_1.html"],[231,"Irene Sánchez y Andrea Campos"],
-[230,"Rebeca Soul","https://www.ivoox.com/entrevista-a-rebeca-soul-audios-mp3_rf_23251072_1.html"],[229,"Grim Swindango","https://www.ivoox.com/entrevista-a-grim-swindango-audios-mp3_rf_23120479_1.html"],[228,"Lemozine y George Karja","https://www.ivoox.com/entrevista-a-lemozine-george-karja-audios-mp3_rf_22003600_1.html"],[227,"Proyecto Reutiliza","https://www.ivoox.com/proyecto-reutiliza-audios-mp3_rf_21594745_1.html"],[226,"Miss Newey","https://www.ivoox.com/entrevista-a-miss-newey-audios-mp3_rf_21310563_1.html"],[225,"Nana Aby","https://www.ivoox.com/entrevista-a-nana-aby-audios-mp3_rf_20902896_1.html"],[224,"Fabiani","https://www.ivoox.com/entrevista-a-fabiani-audios-mp3_rf_19788409_1.html"],[223,"José Córdoba","https://www.ivoox.com/entrevista-a-jose-cordoba-el-chivi-audios-mp3_rf_19546239_1.html"],[222,"Ego Maniacs y Linze","https://www.ivoox.com/entrevista-a-ego-maniacs-linze-audios-mp3_rf_19047524_1.html"],[221,"Jezabel Martínez","https://www.ivoox.com/jezabel-martinez-audios-mp3_rf_18903136_1.html"],[220,"Cristy Leiro","https://www.ivoox.com/entrevista-a-cristy-leiro-audios-mp3_rf_18789803_1.html"],[219,"La señorita Jenckins y sus pacientes","https://www.ivoox.com/entrevista-la-senorita-jenkins-sus-pacientes-audios-mp3_rf_18655870_1.html"],[218,"Miguel García Domenech","https://www.ivoox.com/entrevista-a-miguel-garcia-domenech-audios-mp3_rf_18522893_1.html"],[217,"Fernando Bazán"],[216,"Aroa Fernández"],[215,"Balta Cano"],[214,"Ego Maniacs"],[213,"Carlos de Abuín"],[212,"Angélica Leyva"],[211,"Mireia Montávez"],
-[210,"Lui · Concierto Madrid"],[209,"Gema López"],[208,"Laila Rota"],[207,"Luna Llena y Atacados"],
-[206,"Gata Cattana"],[205,"Fernando Moraño"],[204,"Valentina Sco"],[203,"Iago Cid"],
-[202,"Lupe Catalá y Jamonas","https://www.ivoox.com/entrevista-a-lupe-catala-jamonas-audios-mp3_rf_12236960_1.html"],
-[201,"Emilio Sanchis y Fran Menez"],[200,"71"],[199,"Isabel Soto"],
-[198,"Jimmy Bartanan y Estefanía Martínez"],[197,"Oxígeno"],[196,"Raúl Charlo y Gema López"],
-[195,"Óscar Tomé"],
-[194,"Atacados y Álvaro Brazo","https://www.ivoox.com/entrevista-a-atacados-alvaro-brazo-audios-mp3_rf_11431634_1.html"],
-[193,"Óscar Palet y Joaquín Molina"],[192,"Ángel Robledillo"],[191,"Lui"],
-[190,"Luis Larraya, Abigail López y Laila Rota"],[189,"George Dandin"],[188,"Barei · Eurovisión 2016"],
-[187,"Diversidad Literaria"],[186,"Especial Los 80"],[185,"Whatspc"],[184,"Mingo"],
-[183,"Andorrafreemarket.com"],[182,"Yaima"],[181,"Versilia"],
-[180,"Penny Necklace y Totxtreme · 5 dic 2015"],[179,"Olga Montes · 28 nov 2015"],
-[178,"Lupe Catalá y Ciclonautas · 21 nov 2015"],[177,"Merche Diolch · 7 nov 2015"],
-[176,"Mis Vísceras en el Supermercado · 31 oct 2015"],[175,"Lucía Galindo · 24 oct 2015"],
-[174,"Eva Marciel · 17 oct 2015"],[173,"Carmen Jiménez · 10 oct 2015"],[172,"Vramn · 3 oct 2015"],
-[171,"Saraqusta y Yaima · 25 sep 2015"],[170,"Jesús López (Santa Teresa) · 19 sep 2015"],
-[169,"Dacil Santana · 25 jun 2015"],[168,"Ecocivita · 13 jun 2015"],[167,"Iago Cid · 30 may 2015"],
-[166,"Tarifa Plana y Sonia Betancort · 22 may 2015"],[165,"Programa del 16 de mayo de 2015"],
-[164,"Programa del 25 de abril de 2015"],[163,"Patricia Develasco · 9 abr 2015"],
-[162,"Nonno · 13 mar 2015"],[161,"Blondays · 7 mar 2015"],
-[160,"Lucía Moro y el Síndrome de Woyzeck · 17 feb 2015"],[159,"Coppel y Vidas · 6 feb 2015"],
-[158,"Lara Morello · 30 ene 2015"],[157,"La Herida del Tiempo · 27 ene 2015"],
-[156,"El Sueño de Rocío · 23 ene 2015"],[155,"Lucía Moro · 17 ene 2015"],
-[154,"Metro · 20 dic 2014"],[153,"Microteatro · 19 dic 2014"],[152,"Olaya Alcázar · 11 dic 2014"],
-[151,"El Combate · 22 nov 2014"],[150,"Luz Iglesias · 15 nov 2014"],[149,"Mama Ladilla · 8 nov 2014"],
-[148,"Speed Limit Cruise · 25 oct 2014"],[147,"Ana Estaca · 18 oct 2014"],
-[146,"Martín Maez · 11 oct 2014"],[145,"Javier Calle · 4 oct 2014"],
-[144,"Laura Ordoñez · 27 sep 2014"],[143,"Elisa Mishelle Dávalos · 20 sep 2014"],
-[142,"Jazmín Abuín · 26 jul 2014","https://www.ivoox.com/entrevista-a-jazmin-abuin-audios-mp3_rf_3347738_1.html"],
-[141,"Sara Bandera · 12 jul 2014","https://www.ivoox.com/entrevista-sara-banderas-audios-mp3_rf_3304486_1.html"],
-[140,"No Eres de Villalba, The Night Animal y Diade · 28 jun 2014","https://www.ivoox.com/inconformistas-fm-no-eres-villalba-si-audios-mp3_rf_3260486_1.html"],
-[139,"Moriana · 14 jun 2014","https://www.ivoox.com/entrevista-a-moriana-audios-mp3_rf_3217107_1.html"],
-[138,"Odü · 7 jun 2014","https://www.ivoox.com/entrevista-a-odu-audios-mp3_rf_3191983_1.html"],
-[137,"The Fallen Angels · 24 may 2014","https://www.ivoox.com/entrevista-a-the-fallen-angels-audios-mp3_rf_3168746_1.html"],
-[136,"Nur · 17 may 2014","https://www.ivoox.com/entrevista-a-nur-audios-mp3_rf_3125702_1.html"],
-[135,"Barei · 10 may 2014","https://www.ivoox.com/entrevista-a-barei-audios-mp3_rf_3097956_1.html"],
-[134,"Olga y Héctor · 26 abr 2014","https://www.ivoox.com/entrevista-a-olga-hector-audios-mp3_rf_3054200_1.html"],
-[133,"Chenoa · 5 abr 2014","https://www.ivoox.com/entrevista-a-chenoa-audios-mp3_rf_2991261_1.html"],
-[132,"Axel Losada y The Night Animals · 22 mar 2014","https://www.ivoox.com/entrevista-a-axel-losada-the-night-animals-audios-mp3_rf_2948736_1.html"],
-[131,"Cristina Fungueiriño · 8 mar 2014","https://www.ivoox.com/entrevista-a-cristina-fungueirino-audios-mp3_rf_2896912_1.html"],
-[130,"Yarelín García · 15 feb 2014","https://www.ivoox.com/entrevista-a-yarelin-garcia-audios-mp3_rf_2833032_1.html"],
-[129,"Bea Losán · 8 feb 2014","https://www.ivoox.com/entrevista-a-bea-losan-presentacion-llevame-audios-mp3_rf_2809900_1.html"],
-[128,"The Revolts · 1 feb 2014","https://www.ivoox.com/entrevista-a-the-revolts-audios-mp3_rf_2809517_1.html"],
-[127,"Iván Martín y Yanira Gómez · 18 ene 2014","https://www.ivoox.com/entrevista-ivan-martin-yanira-gomez-audios-mp3_rf_2727528_1.html"],
-[126,"Carlos Galán · 9 ene 2014","https://www.ivoox.com/entrevista-a-carlos-galan-audios-mp3_rf_2701054_1.html"],
-[125,"Bea Losán · 21 dic 2013","https://www.ivoox.com/entrevista-a-bea-losan-audios-mp3_rf_2668073_1.html"],
-[124,"David Amón y Joaquín Molina · 12 dic 2013",null,"http://inconformistasfm.wordpress.com/2013/12/16/entrevista-a-joaquin-molina-y-david-amon/"],
-[123,"María Aguado · 7 dic 2013","https://www.ivoox.com/entrevista-a-maria-aguado-audios-mp3_rf_2621949_1.html"],
-[122,"Abraham «La Voz» · 16 nov 2013","https://www.ivoox.com/entrevista-a-abraham-la-voz-audios-mp3_rf_2590916_1.html"],
-[121,"Nocturnal Pollution · 16 nov 2013","https://www.ivoox.com/entrevista-a-nocturnal-pollution-audios-mp3_rf_2561032_1.html"],
-[120,"Adrián García · 9 nov 2013","https://www.ivoox.com/entrevista-a-adrian-garcia-audios-mp3_rf_2544352_1.html"],
-[119,"Same of Fears · 26 oct 2013","https://www.ivoox.com/entrevista-a-same-of-fears-audios-mp3_rf_2492002_1.html"],
-[118,"Las Mónicas y Mirko · 19 oct 2013","https://www.ivoox.com/entrevista-a-las-monicas-mirko-audios-mp3_rf_2491882_1.html"],
-[117,"Barei · 12 oct 2013","https://www.ivoox.com/entrevista-a-barei-12-10-2013-audios-mp3_rf_2437649_1.html"],
-[116,"Programa del 28 de septiembre de 2013","https://www.ivoox.com/inconformistas-fm-28-09-2013-audios-mp3_rf_2411336_1.html"],
-[115,"Programa del 14 de septiembre de 2013","https://www.ivoox.com/entrevista-a-odu-audios-mp3_rf_2075776_1.html"],
-[114,"La Banda de Mireia · 20 jul 2013","https://www.ivoox.com/entrevista-a-la-banda-mireia-audios-mp3_rf_2227477_1.html"],
-[113,"Kike Navas · 13 jul 2013","https://www.ivoox.com/entrevista-a-kike-navas-audios-mp3_rf_2212716_1.html"],
-[112,"Programa del 6 de julio de 2013","https://www.ivoox.com/programa-6-julio-2013-audios-mp3_rf_2191950_1.html"],
-[111,"Esmeralda Grao · 29 jun 2013","https://www.ivoox.com/entrevista-a-esmeralda-grao-audios-mp3_rf_2176990_1.html"],
-[110,"Angélica Leyva · 22 jun 2013","https://www.ivoox.com/entrevista-a-angelica-leyva-audios-mp3_rf_2153293_1.html"],
-[109,"Programa del 15 de junio de 2013","https://www.ivoox.com/inconformistas-fm-15-junio-2012-audios-mp3_rf_2135415_1.html"],
-[108,"Juan José Jiménez y Varry Brava · 8 jun 2013","https://www.ivoox.com/entrevista-a-juan-jose-jimenez-varry-brava-audios-mp3_rf_2116236_1.html"],
-[107,"Rocío Durán y SN2 · 1 jun 2013","https://www.ivoox.com/entrevista-a-sn2-rocio-duran-audios-mp3_rf_2093294_1.html"],
-[106,"Odü · 25 may 2013","https://www.ivoox.com/entrevista-a-odu-audios-mp3_rf_2075776_1.html"],
-[105,"Especial contra la violencia de género · 18 may 2013","https://www.ivoox.com/programa-contra-violencia-genero-audios-mp3_rf_2055819_1.html"],
-[104,"Barei · 11 may 2013","https://www.ivoox.com/entrevista-a-barei-11-05-2013-audios-mp3_rf_2036368_1.html"],
-[103,"Lugar a Duda · 20 abr 2013","https://www.ivoox.com/entrevista-a-lugar-a-duda-audios-mp3_rf_1967174_1.html"],
-[102,"Merche · 13 abr 2013","https://www.ivoox.com/entrevista-a-merche-13-04-2013-audios-mp3_rf_1952499_1.html"],
-[101,"Programa del 6 de abril de 2013",null,"https://www.box.com/s/wl27xu84okmdg6r0oxdt"],
-[100,"No Pressure · 23 mar 2013",null,"https://www.box.com/s/ejjbz4oq52er5ql8uz5k"],
-[99,"Smile Crew · 16 mar 2013",null,"https://www.box.com/s/q54sy40laozko6h1peoa"],
-[98,"José Ignacio · Tiro con arco · 9 mar 2013",null,"https://www.box.com/s/85c3qjs99map5bj28u6q"],
-[97,"Pull My Strings e Iñigo González · 2 mar 2013",null,"https://www.box.com/s/tm3k0k7nbbnb2cjd6vmq"],
-[96,"Alfre Camarote · 16 feb 2013",null,"https://www.box.com/s/7w7arfupuemtqafjawtm"],
-[95,"Coral Segovia · 9 feb 2013",null,"https://www.box.com/s/3p4pbpbuznvpmj2gqs4c"],
-[94,"Scrig · 2 feb 2013",null,"https://www.box.com/s/rip2h1w43k7yq8de70zp"],
-[93,"Jesús Avilés · 26 ene 2013",null,"https://www.box.com/s/c6q2k73q3dekafnn8za2"],
-[92,"Programa del 19 de enero de 2013",null,"https://www.box.com/s/6l45lon8o8ry0lyrqf5d"],
-[91,"Rosa Martínez · 12 ene 2013",null,"https://www.box.com/s/tcr641xd5beuu7yo72d3"],
-[90,"Natalia Tapia · 22 dic 2012",null,"https://www.box.com/s/pmi0o411erbo4bh6r8bp"],
-[89,"Melburn · 15 dic 2012",null,"https://www.box.com/s/7ss1xacxleurr3xz3qno"],
-[88,"Joe Traveller · 8 dic 2012",null,"https://www.box.com/s/1forw9lnlca8ntc7n3tc"],
-[87,"Los Luque · 1 dic 2012",null,"https://www.box.com/s/ep0zmlrjpeojl2kz34cb"],
-[86,"Barei · 24 nov 2012",null,"https://www.box.com/s/5ywotcpqvgy5egt7my6r"],
-[85,"Virginia (La Voz) y Ainhoa Cantalapiedra · 10 nov 2012",null,"https://www.box.com/s/2pu873m1r1gl9icojkt7"],
-[84,"Versilia · 10 nov 2012",null,"https://www.box.com/s/d8xzmpwzyvyfudsvjb2l"],
-[83,"Mirko · 27 oct 2012",null,"https://www.box.com/s/18qexx4a3sfket4hkw3x"],
-[82,"Salva Ortega · 19 oct 2012",null,"https://www.box.com/s/ygu25yzocdlz29rh8n9s"],
-[81,"Javier Báez · 12 oct 2012",null,"https://www.box.com/s/re2fm6520yxlny8k3u3f"],
-[80,"Cristian Martín · 5 oct 2012",null,"https://www.box.com/s/vx2gfo57pfd8rodrcqep"],
-[79,"Moriana · 29 sep 2012",null,"https://www.box.com/s/bfvqleuf1y7cuf8thdn3"],
-[78,"Aarón y Orlando · 22 sep 2012",null,"https://www.box.com/s/u2n7xnnzsy8vf2v7aqpp"],
-[77,"Josué y Narciso Tenorio · 15 sep 2012",null,"https://www.box.com/s/ob3tdz8l5l4qgts89d9v"],
-[76,"Carlos «The Hitman» · 8 sep 2012",null,"https://www.box.com/s/6vyb1rodviimi1lyjex2"],
-[75,"Mireia Montávez y Lydia Gregory · 28 jul 2012",null,"https://www.box.com/s/21b9c29b888474f3b7cd"],
-[74,"María Villalón · 14 jul 2012",null,"https://www.box.com/s/081f679cd528a9cca8f5"],
-[73,"Lukas con K · 7 jul 2012",null,"https://www.box.com/s/74e9c07e33afa6eac4e8"],
-[72,"Iván Gardesa · 9 jun 2012",null,"https://www.box.com/s/0993347dac3dda58aa00"],
-[71,"Programa del 16 de junio de 2012",null,"https://www.box.com/s/0421210f4ceb196e1dba"],
-[70,"Eduardo Gómez · 2 jun 2012",null,"https://www.box.com/s/5f3f10458d6600079af0"],
-[69,"Iñigo González (GH1) · 26 may 2012",null,"https://www.box.com/s/78cb8b5c877dd4cdd62d"],
-[68,"Señorita Tristeza · 19 may 2012",null,"https://www.box.com/s/91fb7e81df8247d71fb5"],
-[67,"Ladrones · 12 may 2012",null,"https://www.box.com/s/f33b521fbd15cb45fed0"],
-[66,"Inhumanos y Varry Brava · 5 may 2012",null,"https://www.box.com/s/865af626b15219ce4cbc"],
-[65,"Marabú · 28 abr 2012",null,"https://www.box.com/s/40b192f4aa1fecd5205e"],
-[64,"Josué · 21 abr 2012",null,"https://www.box.com/s/394120c7c74471f0a988"],
-[63,"Jaime Córdoba · 14 abr 2012",null,"https://www.box.com/s/5dd4b64c3c82eeb4ccb1"],
-[62,"María Aguado · 24 mar 2012",null,"http://www.box.com/s/6eb6782fc31f30237598"],
-[61,"Barei · 17 mar 2012",null,"http://www.box.com/s/e73575b2bfc29fc6bd2d"],
-[60,"Javier Báez · 10 mar 2012",null,"http://www.box.com/s/y7zboengu2c7404qoixp"],
-[59,"Ainhoa Cantalapiedra · 7 dic 2011",null,"http://www.box.com/s/dk1c59rgi6cloy1paevl"],
-[58,"Sonia Pérez · 7 dic 2011",null,"http://www.box.com/s/390db7p8u1yfkp6mqasx"],
-[57,"Sexy Zebras y Sonia Pérez · 30 nov 2011",null,"http://www.box.com/s/txze0dblpznztt1dy6gj"],
-[56,"Lidia Guevara y Lydia Autric · 24 nov 2011",null,"http://www.box.com/s/sstj8m6eg8ebj0uoe01l"],
-[55,"Alianza Educativa · 16 nov 2011",null,"http://www.box.net/s/xlxecrkai013abf4c8st"],
-[54,"David Guillén · 9 nov 2011",null,"http://www.box.net/shared/mqj0eyulnvfnf7hxe58i"],
-[53,"Plaza Sur y Fran Fernández · 2 nov 2011",null,"http://www.box.net/shared/hgfsm30hf89oykytkza1"],
-[52,"José Ruiz · 26 oct 2011",null,"http://www.box.net/shared/gna0fzyqrv87mixfdhk8"],
-[51,"Programa del 19 de octubre de 2011",null,"http://www.box.net/shared/b1y2lni7lptmrz0edbl9"],
-[50,"Mireia Montávez y Rubén Tajuelo · 5 oct 2011",null,"http://www.box.net/shared/t1b0ndnj1ubgkkbb5cqt"],
-[49,"María Villalón · 28 sep 2011",null,"http://www.box.net/shared/orxm8day8qrrfu47te76"],
-[48,"Novana · 21 sep 2011",null,"http://www.box.net/shared/yfpfnf058d70x5vsmsrh"],
-[47,"Ismael Beiro · 14 sep 2011",null,"http://www.box.net/shared/hdqfnrcaqg9gpzmnvyvh"],
-[46,"Programa del 7 de septiembre de 2011",null,"http://www.box.net/shared/93xr5zukpxoxhp8lyxeg"],
-[45,"Marta Simón y María Villalón · 27 jul 2011",null,"http://www.box.net/shared/86g8rtmcemqy8q5qyabs"],
-[44,"Angélica · 20 jul 2011",null,"http://www.box.net/shared/49aptjafyjsyah8acr7e"],
-[43,"Programa del 13 de julio de 2011",null,"http://www.box.net/shared/v6gkfmomb1axq44o2u5a"],
-[42,"Knarias · 6 jul 2011",null,"http://www.box.net/shared/zjcre6gvgvg7sqaeon15"],
-[41,"Programa del 22 de junio de 2011",null,"http://www.box.net/shared/m5d5bk16dvxof22enhtu"],
-[40,"Programa del 15 de junio de 2011",null,"http://www.box.net/shared/alvaus276v5us2lm9nfu"],
-[39,"María Aguado · 8 jun 2011",null,"http://www.box.net/shared/7xn63igvsb"],
-[38,"Fundación Blas Méndez Ponce, María Villalón, Auryn y Rubén Tajuelo · 1 jun 2011",null,"http://www.box.net/shared/iaf628zssg"],
-[37,"Programa del 25 de mayo de 2011",null,"http://www.box.net/shared/jievyxr1q8"],
-[36,"Jon Allende · 18 may 2011",null,"http://www.box.net/shared/c5c0fddgjk"],
-[35,"Roxio (Operación Triunfo 2011) · 11 may 2011",null,"http://www.box.net/shared/ucte40gxcp"],
-[34,"La Vieja Morla y Los Cucas · 4 may 2011",null,"http://www.box.net/shared/k48103xygl"],
-[33,"Programa del 27 de abril de 2011",null,"http://www.box.net/shared/dchvrtuzv7"],
-[32,"Santi Simón · 20 abr 2011",null,"http://www.box.net/shared/tolslgyq1x"],
-[31,"Lucas y los Mayordomos de San Antonio · 13 abr 2011",null,"http://www.box.net/shared/208pmpgta4"],
-[30,"Se Alkila · 6 abr 2011",null,"http://www.box.net/shared/i9j73do9jb"],
-[29,"Lucía Pérez, Eurovisión 2011 · 30 mar 2011",null,"http://www.box.net/shared/g9gldcor46"],
-[28,"Verónica Ramos · 23 mar 2011",null,"http://www.box.net/shared/qf4k8yv9ie"],
-[27,"Programa del 16 de marzo de 2011",null,"http://www.box.net/shared/d0o4btqjsz"],
-[26,"Programa del 9 de marzo de 2011",null,"http://www.box.net/shared/np7rdg5su0"],
-[25,"Programa del 2 de marzo de 2011",null,"http://www.box.net/shared/hzpl2fmjl5"],
-[24,"Siloé de Izán · 23 feb 2011",null,"http://www.box.net/shared/8kmcs2gm6m"],
-[23,"O'Madamme · 16 feb 2011",null,"http://www.box.net/shared/z4rf3yj59s"],
-[22,"Programa del 9 de febrero de 2011",null,"http://www.box.net/shared/csg6vev4cf"],
-[21,"K-Narias · 2 feb 2011",null,"http://www.box.net/shared/z9ri2eqeq7"],
-[20,"Programa del 27 de enero de 2011",null,"http://www.box.net/shared/ks8pys7bl5"],
-[19,"Programa del 19 de enero de 2011",null,"http://www.box.net/shared/gq8c4qog0q"],
-[18,"Programa del 12 de enero de 2011",null,"http://www.box.net/shared/3ec4s1xvfq"],
-[17,"Nonno · 5 ene 2011",null,"http://www.box.net/shared/aqpgsqnidf"],
-[16,"Alfre y el Camarote · 29 dic 2010",null,"http://www.box.net/shared/gj3z3qsqjf"],
-[15,"Programa del 22 de diciembre de 2010",null,"http://www.box.net/shared/hp1gr5632k"],
-[14,"K-Narias y María Villalón · 15 dic 2010",null,"http://www.box.net/shared/j42pmuh9hr"],
-[13,"Programa del 8 de diciembre de 2010",null,"http://www.box.net/shared/37jbntio8g"],
-[12,"Nonno · 1 dic 2010",null,"http://www.box.net/shared/4uh2oebfdx"],
-[11,"Natalia · 24 nov 2010",null,"http://www.box.net/shared/xn0a8mbfqu"],
-[10,"Programa del 17 de noviembre de 2010",null,"http://www.box.net/shared/6cni2fsl6i"],
-[9,"María Villalón · 10 nov 2010",null,"http://www.box.net/shared/sjq2rx54ip"],
-[8,"Programa del 3 de noviembre de 2010",null,"http://www.box.net/shared/i5y8c38zpy"],
-[7,"Programa del 27 de octubre de 2010",null,"http://www.box.net/shared/ozfvdu3evx"],
-[6,"Programa del 20 de octubre de 2010",null,"http://www.box.net/shared/xb05u1y9to"],
-[5,"Programa del 13 de octubre de 2010",null,"http://www.box.net/shared/o8bxo5apst"],
-[4,"Programa del 6 de octubre de 2010",null,"http://www.box.net/shared/splsj3j3cq"],
-[3,"No se emitió: huelga general contra la reforma laboral · 29 sep 2010"],
-[2,"Programa del 22 de septiembre de 2010",null,"http://www.box.net/shared/5xjfz4a5u1"],
-[1,"Primer programa · 15 de septiembre de 2010",null,"http://www.box.net/shared/cipfqj07i5"]
-];
+/* Los programas viven en /datos/programas.js (una línea por programa, ver instrucciones allí).
+   Aquí se convierten al formato interno [nº, título, iVoox, audio antiguo, blog, Spotify].
+   Los que tienen "desde" en el futuro quedan pendientes y aparecen solos a esa hora. */
+var P=[], P_PENDIENTES=[];
+(function(){
+  var datos=Array.isArray(window.PROGRAMAS)?window.PROGRAMAS:[];
+  if(!datos.length && window.console) console.error("No se han cargado los programas: revisa /datos/programas.js");
+  var ahora=new Date();
+  datos.forEach(function(d){
+    if(!d || typeof d.n!=="number") return;
+    var fila=[d.n,d.titulo,d.ivoox||null,d.audio||null,d.blog||null,d.spotify||null];
+    if(d.desde && new Date(d.desde)>ahora) P_PENDIENTES.push({fila:fila,cuando:new Date(d.desde)});
+    else P.push(fila);
+  });
+  P.sort(function(a,b){return b[0]-a[0];});
+  if(P_PENDIENTES.length){
+    var relojProgramas=window.setInterval(function(){
+      var ya=new Date(), salieron=false;
+      P_PENDIENTES=P_PENDIENTES.filter(function(x){
+        if(x.cuando>ya) return true;
+        P.push(x.fila); salieron=true; return false;
+      });
+      if(!salieron) return;
+      P.sort(function(a,b){return b[0]-a[0];});
+      if(document.getElementById("lista") && typeof pintarProgramas==="function"){
+        var q=document.getElementById("q"); pintarProgramas(q?q.value:"");
+      }
+      var cifra=document.querySelector(".cifras div b"); if(cifra) cifra.textContent=String(P.length);
+      if(!P_PENDIENTES.length) window.clearInterval(relojProgramas);
+    },15000);
+  }
+})();
+
 
 var FOTO_BAREI="/img/barei.jpg";
 var FOTO_CHENOA="/img/chenoa.jpg";

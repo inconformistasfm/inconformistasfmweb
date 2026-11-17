@@ -1,0 +1,21 @@
+name: Comprobar datos
+
+# Revisa que datos/programas.js esté bien escrito cada vez que se cambia,
+# también en las ramas de prueba y en los Pull requests. Si hay un fallo,
+# sale una cruz roja con el motivo en castellano.
+on:
+  push:
+    paths: ['datos/**', 'scripts/comprobar-datos.mjs']
+  pull_request:
+    paths: ['datos/**', 'scripts/comprobar-datos.mjs']
+  workflow_dispatch:
+
+jobs:
+  comprobar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/comprobar-datos.mjs
