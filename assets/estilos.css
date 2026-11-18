@@ -573,3 +573,38 @@
 .enviado-caja h3{font-family:"Fraunces",Georgia,serif;font-size:28px;margin:10px 0 6px;color:var(--tinta)}
 .enviado-caja p{margin:0 0 18px;color:var(--suave);font-size:17px}
 .enviado-ico{width:64px;height:64px;line-height:64px;margin:0 auto;border-radius:50%;background:var(--turquesa);color:#fff;font-size:36px;font-weight:700;border:3px solid var(--tinta)}
+
+
+/* Reproductor del programa 283: pequeño, flotante, arrastrable y persistente. */
+#ivooxModal.cine-flotante{
+  position:fixed!important;inset:0!important;z-index:10050!important;
+  display:none;align-items:flex-start;justify-content:flex-end;
+  padding:0!important;background:transparent!important;
+  pointer-events:none!important;overflow:visible!important;
+}
+#ivooxModal.cine-flotante.abierto{display:flex!important}
+#ivooxModal .ivoox-caja.cine-flotante-caja{
+  position:fixed!important;left:auto;top:auto;right:22px;bottom:22px;
+  width:min(390px,calc(100vw - 24px))!important;max-width:none!important;
+  padding:44px 9px 9px!important;margin:0!important;
+  border:2px solid var(--tinta)!important;border-radius:14px!important;
+  background:var(--papel)!important;box-shadow:0 10px 32px rgba(0,0,0,.32)!important;
+  overflow:visible!important;pointer-events:auto!important;
+}
+#ivooxModal .cine-arrastre{
+  position:absolute;left:0;right:0;top:0;height:38px;
+  display:flex;align-items:center;gap:8px;padding:0 48px 0 12px;
+  background:var(--tinta);color:#fff;border-radius:11px 11px 0 0;
+  cursor:move;touch-action:none;user-select:none;
+}
+#ivooxModal .cine-titulo{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ivooxModal .cine-ayuda{font-size:10px;opacity:.72;white-space:nowrap}
+#ivooxModal .ivoox-cerrar{z-index:2;right:6px;top:4px;width:30px;height:30px;font-size:20px}
+#ivooxModal .ivoox-player{height:96px!important;min-height:96px!important;border-radius:8px}
+@media(max-width:600px){
+  #ivooxModal .ivoox-caja.cine-flotante-caja{
+    left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));
+    width:auto!important;max-width:none!important;
+  }
+  #ivooxModal .cine-ayuda{display:none}
+}
