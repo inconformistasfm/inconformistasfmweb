@@ -1625,7 +1625,7 @@ function mostrarMensajeEnviado(){
 
   var abrirAnterior=window.abrirIvoox;
   window.abrirIvoox=function(url){
-    if(url && /archive\\.org\\/embed\\//i.test(url)){
+    if(url && /archive\.org\/embed\//i.test(url)){
       frame.title="Reproductor de audio del programa especial de cine";
       frame.removeAttribute("loading");
       frame.src=ARCHIVE_URL;
