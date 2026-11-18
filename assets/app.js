@@ -1658,6 +1658,26 @@ function mostrarMensajeEnviado(){
     document.body.style.overflow="";
   };
 
+  /* Spotify también se abre en el mismo reproductor flotante. */
+  var abrirSpotifyAnterior=window.abrirSpotify;
+  window.abrirSpotify=function(url){
+    if(!url) return false;
+    var limpio=url.split(/[?#]/)[0].replace(/\/$/,"");
+    var m=limpio.match(/open\.spotify\.com\/(episode|track|album|playlist|show|artist)\/([A-Za-z0-9]+)/i);
+    if(m){
+      frame.title="Reproductor Spotify · Inconformistas FM";
+      frame.removeAttribute("loading");
+      frame.src="https://open.spotify.com/embed/"+m[1]+"/"+m[2]+"?utm_source=generator";
+      frame.style.height="152px";
+      frame.style.width="100%";
+      modal.classList.add("abierto","cine-flotante");
+      modal.setAttribute("aria-hidden","false");
+      document.body.style.overflow="";
+      return false;
+    }
+    return typeof abrirSpotifyAnterior==="function"?abrirSpotifyAnterior(url):false;
+  };
+
   var moviendo=false, inicioX=0, inicioY=0, cajaX=0, cajaY=0;
   barra.addEventListener("pointerdown",function(e){
     if(e.target.closest(".ivoox-cerrar")) return;
