@@ -601,6 +601,8 @@
 #ivooxModal .cine-ayuda{font-size:10px;opacity:.72;white-space:nowrap}
 #ivooxModal .ivoox-cerrar{z-index:2;right:6px;top:4px;width:30px;height:30px;font-size:20px}
 #ivooxModal .ivoox-player{height:96px!important;min-height:96px!important;border-radius:8px}
+#ivooxModal .ivoox-player.reproductor-ivoox{height:210px!important;min-height:210px!important}
+#ivooxModal .ivoox-player.reproductor-spotify{height:210px!important;min-height:210px!important}
 @media(max-width:600px){
   #ivooxModal .ivoox-caja.cine-flotante-caja{
     left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));
