@@ -1179,10 +1179,10 @@ pintar();
       return card;
     }
     var halloween=crear('halloween','Especial Halloween','PROGRAMA ESPECIAL','https://raw.githubusercontent.com/inconformistasfm/inconformistasfmweb/main/fotos-programas/280/watermarked_img_7616198293509931508.jpg','Cartel del Especial Halloween','Un programa especial con Gustavo Adolfo Bécquer, Don Juan Tenorio y una historia que pudo o no pasar.','https://www.ivoox.com/player_ej_182802536_6_1.html?c1=cb2650');
-    var bandas=crear('bandas','Bandas de rock que cambiaron su formación','','https://raw.githubusercontent.com/inconformistasfm/inconformistasfmweb/main/fotos-programas/279/portada.jpg','Cartel del programa Bandas de rock','En Inconformistas FM hablamos de bandas de rock que han cambiado su composición durante su carrera, como Nightwish, Metallica, AC/DC, Black Sabbath, Pink Floyd y Mägo de Oz.','https://www.ivoox.com/player_ej_182637950_6_1.html?c1=cb2650');
+    var tinaisa=crear('tinaisa','Entrevista a Tinaisa','ENTREVISTA','/img/foto-portada.jpg','Portada del sencillo «Baby Boo» de Tinaisa','La artista Tinaisa nos presentó «Baby Boo», su recién estrenado sencillo: un tema lleno de energía que fusiona afrobeat y afropop contemporáneo, con una producción de primer nivel a cargo de Dabruk.','https://www.ivoox.com/player_ej_183749601_6_1.html?c1=cb2650');
     var flamenco=window.FOTO_DE_ARTE_FLAMENCO ? crear('flamenco','Entrevista a De Arte Flamenco','ENTREVISTA',window.FOTO_DE_ARTE_FLAMENCO,'Cartel de la entrevista a De Arte Flamenco','El duende, el compás y el sentimiento de la música flamenca llegaron a nuestros micrófonos de la mano de De Arte Flamenco, que además nos sorprendió con alguno de sus temas en directo.','https://www.ivoox.com/player_ej_183380889_6_1.html?c1=cb2650') : null;
     var anterior=null;
-    [flamenco,halloween,bandas].forEach(function(card){
+    [tinaisa,flamenco,halloween].forEach(function(card){
       if(!card) return;
       var ref=anterior ? anterior.nextSibling : fila.firstChild;
       if(card!==ref) fila.insertBefore(card,ref);
@@ -1196,23 +1196,18 @@ pintar();
   setInterval(ordenarUltimos,1500);
 })();
 ;
-/* Portada estable: fija la noticia principal (posición 1): Entrevista a Tinaisa, con su botón de escucha en directo. */
+/* Portada estable: fija la noticia principal (posición 1): Programa especial de cine, con su botón de escucha en directo. */
 (function(){
   window.FOTO_DE_ARTE_FLAMENCO = "/img/de-arte-flamenco.jpg";
-  var FOTO = "/img/foto-portada.jpg";
-  var TITULO = "ENTREVISTA A TINAISA";
+  var FOTO = "/img/especial-cine.jpg";
+  var TITULO = "PROGRAMA ESPECIAL DE CINE";
   var PARRAFOS = [
-    '¡Este sábado, ritmo afrobeat y afropop con Tinaisa!',
-    'Este sábado 14 de noviembre a las 19:30h nos visita en Inconformistas FM la artista Tinaisa para presentarnos «Baby Boo», su recién estrenado sencillo. Un tema lleno de energía que fusiona afrobeat y afropop contemporáneo con una producción de primer nivel a cargo de Dabruk. Hablaremos con ella sobre su trayectoria, el proceso creativo detrás de este lanzamiento y todo lo que viene.',
-    'Sintonízanos en el 107.4 FM (Radio Villalba) o escúchanos en directo desde la web en inconformistasfm.es. ¡No te lo pierdas!'
+    '¿Quién dijo que las pelis navideñas son todas iguales? En este programa de Inconformistas FM, tras nuestra visita con Tinaisa, nos ponemos las gafas de la nostalgia para rescatar esas películas que ambientan las fiestas de una forma muy... particular.',
+    'Nos adentramos en los secretos de rodaje, anécdotas imperdibles y bandas sonoras legendarias de títulos que van desde el terror más puro hasta la comedia negra y la animación de culto. ¡Dale al play y descubre por qué el invierno cinematográfico da para mucho más que villancicos!'
   ];
   /* El sábado 14/11/2026 (desde las 00:00, hora peninsular) la noticia pasa a decir «Hoy». */
   var HOY_TINAISA = new Date("2026-11-14T00:00:00+01:00");
-  var PARRAFOS_HOY = [
-    '¡Hoy el ritmo afrobeat y afropop con Tinaisa!',
-    'Hoy sábado 14 de noviembre a las 19:30h nos visita en Inconformistas FM la artista Tinaisa para presentarnos «Baby Boo», su recién estrenado sencillo. Un tema lleno de energía que fusiona afrobeat y afropop contemporáneo con una producción de primer nivel a cargo de Dabruk. Hablaremos con ella sobre su trayectoria, el proceso creativo detrás de este lanzamiento y todo lo que viene.',
-    'Sintonízanos en el 107.4 FM (Radio Villalba) o escúchanos en directo desde la web en inconformistasfm.es. ¡No te lo pierdas!'
-  ];
+  var PARRAFOS_HOY = PARRAFOS; /* sin variante «Hoy» por ahora */
   var ESTILO_P = 'margin:0 0 8px;color:var(--suave);line-height:1.45';
   function aplicar(){
     var principal=document.querySelector('.anuncio-rock');
@@ -1220,7 +1215,7 @@ pintar();
     var h=principal.querySelector('h3'), img=principal.querySelector('img');
     if(!h || !img) return;
     if(h.textContent.trim()!==TITULO) h.textContent=TITULO;
-    if(img.getAttribute('src')!==FOTO){img.src=FOTO; img.alt='Portada del sencillo «Baby Boo» de Tinaisa';}
+    if(img.getAttribute('src')!==FOTO){img.src=FOTO; img.alt='Cartel del programa especial de cine: Los Gremlins, Eduardo Manostijeras y La jungla de cristal';}
     img.style.cssText='display:block;width:100%;max-width:130px;height:auto;object-fit:contain;border:0;border-radius:0';
     var texto=h.parentElement;
     var TEXTO=(new Date()>=HOY_TINAISA)?PARRAFOS_HOY:PARRAFOS;
@@ -1231,7 +1226,7 @@ pintar();
       if(ps[i].getAttribute('style')!==ESTILO_P) ps[i].setAttribute('style',ESTILO_P);
     }
     for(var j=TEXTO.length;j<ps.length;j++) ps[j].remove();
-    var etiqueta=texto.querySelector('span'); if(etiqueta && etiqueta.textContent!=='ENTREVISTA') etiqueta.textContent='ENTREVISTA';
+    var etiqueta=texto.querySelector('span'); if(etiqueta && etiqueta.textContent!=='PROGRAMA ESPECIAL') etiqueta.textContent='PROGRAMA ESPECIAL';
     var contador=texto.querySelector('#contador-dias-rock'); if(contador) contador.remove();
     Array.prototype.forEach.call(principal.querySelectorAll('.escuchar-rock-programado'),function(e){e.remove();});
     Array.prototype.forEach.call(principal.querySelectorAll('a,button'),function(el){
@@ -1411,6 +1406,11 @@ pintar();
   var IVOOX_TINAISA = "https://www.ivoox.com/player_ej_183749601_6_1.html?c1=cb2650";
   var TITULO_TINAISA = "Entrevista a Tinaisa 14/11/2026";
   var agregado282 = false;
+  /* Noticia principal actual (programa especial de cine, sábado 21/11/2026 a las 19:30): el botón se queda en «Escuchar en directo».
+     Cuando haya reproductor de iVoox, poner aquí la hora de fin del programa y el enlace para que pase solo a «Escuchar». */
+  var EMISION_PRINCIPAL = null;
+  var IVOOX_PRINCIPAL = null;
+  function principalEmitido(){ return !!EMISION_PRINCIPAL && !!IVOOX_PRINCIPAL && new Date()>=EMISION_PRINCIPAL; }
 
   function botonNoticia(contenedor){
     if(contenedor.querySelector('[data-boton-principal="1"]')) return;
@@ -1418,12 +1418,12 @@ pintar();
     a.setAttribute('data-boton-principal','1');
     a.className='btn rosa';
     a.href='#';
-    a.textContent=(new Date()>=EMISION_TINAISA)?'▶ Escuchar':'▶ Escuchar en directo';
+    a.textContent=principalEmitido()?'▶ Escuchar':'▶ Escuchar en directo';
     a.style.cssText='display:inline-flex;margin-top:12px;align-items:center;justify-content:center';
     a.addEventListener('click',function(ev){
       ev.preventDefault();
-      if(new Date()>=EMISION_TINAISA){
-        if(typeof window.abrirIvoox==='function') window.abrirIvoox(IVOOX_TINAISA);
+      if(principalEmitido()){
+        if(typeof window.abrirIvoox==='function') window.abrirIvoox(IVOOX_PRINCIPAL);
         return;
       }
       if(typeof window.iniciarRadio==='function') window.iniciarRadio();
@@ -1435,7 +1435,7 @@ pintar();
   function ajustarBotonNoticia(contenedor){
     var a=contenedor.querySelector('[data-boton-principal="1"]');
     if(!a) return;
-    var texto=(new Date()>=EMISION_TINAISA)?'▶ Escuchar':'▶ Escuchar en directo';
+    var texto=principalEmitido()?'▶ Escuchar':'▶ Escuchar en directo';
     if(a.textContent!==texto) a.textContent=texto;
   }
 
