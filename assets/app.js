@@ -1526,3 +1526,190 @@ function mostrarMensajeEnviado(){
   document.body.appendChild(v);setTimeout(cerrar,8000);
   var bt=v.querySelector("button");if(bt)bt.focus();
 }
+
+
+/* Reproductor Archive.org para el especial de cine (21/11/2026, 20:30 hora peninsular). */
+(function(){
+  var FECHA_CINE = new Date("2026-11-21T20:30:00+01:00");
+  var ARCHIVE_PLAYER = "https://archive.org/embed/inconformistas-fm-21-11-2026-audio-homogeneizado";
+  var TITULO_PROGRAMA = "Programa especial de cine";
+  var agregado283 = false;
+  var VISTA_PREVIA = new URLSearchParams(window.location.search).get("previsualizar") === "21nov";
+  function fechaActivada(){ return VISTA_PREVIA || new Date()>=FECHA_CINE; }
+
+  /* Reutiliza la ventana modal de audio existente, pero carga el reproductor
+     embebido de Archive.org (no la página de detalles del archivo). */
+  var abrirOriginal = window.abrirIvoox;
+  window.abrirIvoox = function(url){
+    if(url && /^https?:\/\/archive\.org\/embed\//i.test(url)){
+      var modal=document.getElementById("ivooxModal");
+      var player=document.getElementById("ivooxPlayer");
+      if(!modal || !player) return false;
+      player.setAttribute("title","Reproductor de audio del programa especial de cine");
+      player.style.width="100%";
+      player.style.height="60px";
+      player.style.border="0";
+      player.src=ARCHIVE_PLAYER;
+      modal.classList.add("abierto");
+      modal.setAttribute("aria-hidden","false");
+      document.body.style.overflow="hidden";
+      return false;
+    }
+    return typeof abrirOriginal==="function" ? abrirOriginal(url) : false;
+  };
+
+  function actualizarBotonNoticia(){
+    var boton=document.querySelector('[data-boton-principal="1"]');
+    if(!boton) return;
+    boton.textContent = fechaActivada() ? "▶ Escuchar" : "▶ Escuchar en directo";
+  }
+
+  /* Captura el clic antes del manejador antiguo: tras las 20:30 abre el
+     reproductor Archive.org en la misma ventana modal, sin abrir otra página. */
+  document.addEventListener("click",function(ev){
+    var boton=ev.target && ev.target.closest ? ev.target.closest('[data-boton-principal="1"]') : null;
+    if(!boton || !fechaActivada()) return;
+    ev.preventDefault();
+    ev.stopImmediatePropagation();
+    window.abrirIvoox(ARCHIVE_PLAYER);
+  },true);
+
+  function agregarPrograma283(){
+    if(!fechaActivada() || agregado283 || !Array.isArray(window.P)) return;
+    if(!window.P.some(function(p){return Number(p[0])===283;})){
+      window.P.unshift([283,TITULO_PROGRAMA,ARCHIVE_PLAYER,null,null,null]);
+    }
+    agregado283=true;
+    if(typeof window.pintarProgramas==="function"){
+      var q=document.getElementById("q");
+      window.pintarProgramas(q?q.value:"");
+    }
+    var cifra=document.querySelector(".cifras div b");
+    if(cifra) cifra.textContent=String(window.P.length);
+  }
+
+  function ejecutar(){
+    actualizarBotonNoticia();
+    agregarPrograma283();
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",ejecutar);
+  else ejecutar();
+  window.addEventListener("load",ejecutar);
+  window.addEventListener("hashchange",function(){setTimeout(ejecutar,250);});
+  window.setInterval(ejecutar,1000);
+})();
+
+
+/* PROGRAMA 283: reproductor flotante persistente y arrastrable para Archive.org.
+   Se mantiene fuera de #main, por lo que no se desmonta al navegar por la SPA. */
+(function(){
+  var ARCHIVE_URL="https://archive.org/embed/inconformistas-fm-21-11-2026-audio-homogeneizado";
+  var TITULO="Reproductor Inconformistas FM";
+  var modal=document.getElementById("ivooxModal");
+  var caja=modal&&modal.querySelector(".ivoox-caja");
+  var frame=document.getElementById("ivooxPlayer");
+  if(!modal||!caja||!frame) return;
+
+  modal.classList.add("cine-flotante");
+  caja.classList.add("cine-flotante-caja");
+  caja.setAttribute("aria-label","Reproductor flotante de Inconformistas FM");
+
+  var barra=caja.querySelector(".cine-arrastre");
+  if(!barra){
+    barra=document.createElement("div");
+    barra.className="cine-arrastre";
+    barra.innerHTML='<span class="cine-titulo">🎬 '+TITULO+'</span><span class="cine-ayuda">Arrastra para mover</span>';
+    var cerrar=caja.querySelector(".ivoox-cerrar");
+    caja.insertBefore(barra,cerrar||caja.firstChild);
+  }
+
+  var abrirAnterior=window.abrirIvoox;
+  window.abrirIvoox=function(url){
+    if(!url) return false;
+    if(/archive\.org\/embed\//i.test(url)){
+      frame.classList.remove("reproductor-ivoox","reproductor-spotify");
+      frame.title="Reproductor de audio de Inconformistas FM";
+      frame.removeAttribute("loading");
+      frame.src=url;
+      frame.style.height="96px";
+      frame.style.width="100%";
+      modal.classList.add("abierto","cine-flotante");
+      modal.setAttribute("aria-hidden","false");
+      document.body.style.overflow="";
+      return false;
+    }
+    /* Todos los audios añadidos a partir de ahora (iVoox y otros enlaces
+       compatibles con abrirIvoox) utilizan la misma ventana flotante. */
+    var esIvoox=/player_ej_|(?:rf_|rf\/)/i.test(url);
+    frame.classList.toggle("reproductor-ivoox",esIvoox);
+    frame.classList.remove("reproductor-spotify");
+    if(esIvoox) frame.style.height="210px";
+    var resultado=typeof abrirAnterior==="function"?abrirAnterior(url):false;
+    if(modal.classList.contains("abierto")){
+      modal.classList.add("cine-flotante");
+      modal.setAttribute("aria-hidden","false");
+      document.body.style.overflow="";
+      frame.title="Reproductor de audio de Inconformistas FM";
+    }
+    return resultado;
+  };
+
+  /* El fondo no cierra el reproductor: solo la X lo hace. */
+  window.cerrarIvoox=function(ev){
+    if(ev) return;
+    modal.classList.remove("abierto");
+    modal.setAttribute("aria-hidden","true");
+    frame.src="about:blank";
+    document.body.style.overflow="";
+  };
+
+  /* Spotify también se abre en el mismo reproductor flotante. */
+  var abrirSpotifyAnterior=window.abrirSpotify;
+  window.abrirSpotify=function(url){
+    if(!url) return false;
+    var limpio=url.split(/[?#]/)[0].replace(/\/$/,"");
+    var m=limpio.match(/open\.spotify\.com\/(episode|track|album|playlist|show|artist)\/([A-Za-z0-9]+)/i);
+    if(m){
+      frame.classList.remove("reproductor-ivoox");
+      frame.classList.add("reproductor-spotify");
+      frame.title="Reproductor Spotify · Inconformistas FM";
+      frame.removeAttribute("loading");
+      frame.src="https://open.spotify.com/embed/"+m[1]+"/"+m[2]+"?utm_source=generator";
+      frame.style.height="210px";
+      frame.style.width="100%";
+      modal.classList.add("abierto","cine-flotante");
+      modal.setAttribute("aria-hidden","false");
+      document.body.style.overflow="";
+      return false;
+    }
+    return typeof abrirSpotifyAnterior==="function"?abrirSpotifyAnterior(url):false;
+  };
+
+  var moviendo=false, inicioX=0, inicioY=0, cajaX=0, cajaY=0;
+  barra.addEventListener("pointerdown",function(e){
+    if(e.target.closest(".ivoox-cerrar")) return;
+    moviendo=true;
+    var r=caja.getBoundingClientRect();
+    inicioX=e.clientX; inicioY=e.clientY; cajaX=r.left; cajaY=r.top;
+    caja.style.left=r.left+"px"; caja.style.top=r.top+"px";
+    caja.style.right="auto"; caja.style.bottom="auto";
+    barra.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  barra.addEventListener("pointermove",function(e){
+    if(!moviendo) return;
+    var maxX=Math.max(8,window.innerWidth-caja.offsetWidth-8);
+    var maxY=Math.max(8,window.innerHeight-caja.offsetHeight-8);
+    caja.style.left=Math.min(maxX,Math.max(8,cajaX+e.clientX-inicioX))+"px";
+    caja.style.top=Math.min(maxY,Math.max(8,cajaY+e.clientY-inicioY))+"px";
+  });
+  function soltar(){moviendo=false;}
+  barra.addEventListener("pointerup",soltar);
+  barra.addEventListener("pointercancel",soltar);
+  window.addEventListener("resize",function(){
+    if(!modal.classList.contains("abierto")) return;
+    var r=caja.getBoundingClientRect();
+    caja.style.left=Math.min(Math.max(8,r.left),Math.max(8,window.innerWidth-caja.offsetWidth-8))+"px";
+    caja.style.top=Math.min(Math.max(8,r.top),Math.max(8,window.innerHeight-caja.offsetHeight-8))+"px";
+  });
+})();
