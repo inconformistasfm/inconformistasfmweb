@@ -1532,7 +1532,7 @@ function mostrarMensajeEnviado(){
 (function(){
   var FECHA_CINE = new Date("2026-11-21T20:30:00+01:00");
   var ARCHIVE_PLAYER = "https://archive.org/embed/inconformistas-fm-21-11-2026-audio-homogeneizado";
-  var TITULO_PROGRAMA = "Programa especial de cine · 21/11/2026";
+  var TITULO_PROGRAMA = "Programa especial de cine";
   var agregado283 = false;
 
   /* Reutiliza la ventana modal de audio existente, pero carga el reproductor
