@@ -1598,3 +1598,81 @@ function mostrarMensajeEnviado(){
   window.addEventListener("hashchange",function(){setTimeout(ejecutar,250);});
   window.setInterval(ejecutar,1000);
 })();
+
+
+/* PROGRAMA 283: reproductor flotante persistente y arrastrable para Archive.org.
+   Se mantiene fuera de #main, por lo que no se desmonta al navegar por la SPA. */
+(function(){
+  var ARCHIVE_URL="https://archive.org/embed/inconformistas-fm-21-11-2026-audio-homogeneizado";
+  var TITULO="Inconformistas FM · Especial de cine";
+  var modal=document.getElementById("ivooxModal");
+  var caja=modal&&modal.querySelector(".ivoox-caja");
+  var frame=document.getElementById("ivooxPlayer");
+  if(!modal||!caja||!frame) return;
+
+  modal.classList.add("cine-flotante");
+  caja.classList.add("cine-flotante-caja");
+  caja.setAttribute("aria-label","Reproductor del programa especial de cine");
+
+  var barra=caja.querySelector(".cine-arrastre");
+  if(!barra){
+    barra=document.createElement("div");
+    barra.className="cine-arrastre";
+    barra.innerHTML='<span class="cine-titulo">🎬 '+TITULO+'</span><span class="cine-ayuda">Arrastra para mover</span>';
+    var cerrar=caja.querySelector(".ivoox-cerrar");
+    caja.insertBefore(barra,cerrar||caja.firstChild);
+  }
+
+  var abrirAnterior=window.abrirIvoox;
+  window.abrirIvoox=function(url){
+    if(url && /archive\\.org\\/embed\\//i.test(url)){
+      frame.title="Reproductor de audio del programa especial de cine";
+      frame.removeAttribute("loading");
+      frame.src=ARCHIVE_URL;
+      frame.style.height="96px";
+      frame.style.width="100%";
+      modal.classList.add("abierto","cine-flotante");
+      modal.setAttribute("aria-hidden","false");
+      document.body.style.overflow="";
+      return false;
+    }
+    return typeof abrirAnterior==="function"?abrirAnterior(url):false;
+  };
+
+  /* El fondo no cierra el reproductor: solo la X lo hace. */
+  window.cerrarIvoox=function(ev){
+    if(ev) return;
+    modal.classList.remove("abierto");
+    modal.setAttribute("aria-hidden","true");
+    frame.src="about:blank";
+    document.body.style.overflow="";
+  };
+
+  var moviendo=false, inicioX=0, inicioY=0, cajaX=0, cajaY=0;
+  barra.addEventListener("pointerdown",function(e){
+    if(e.target.closest(".ivoox-cerrar")) return;
+    moviendo=true;
+    var r=caja.getBoundingClientRect();
+    inicioX=e.clientX; inicioY=e.clientY; cajaX=r.left; cajaY=r.top;
+    caja.style.left=r.left+"px"; caja.style.top=r.top+"px";
+    caja.style.right="auto"; caja.style.bottom="auto";
+    barra.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  barra.addEventListener("pointermove",function(e){
+    if(!moviendo) return;
+    var maxX=Math.max(8,window.innerWidth-caja.offsetWidth-8);
+    var maxY=Math.max(8,window.innerHeight-caja.offsetHeight-8);
+    caja.style.left=Math.min(maxX,Math.max(8,cajaX+e.clientX-inicioX))+"px";
+    caja.style.top=Math.min(maxY,Math.max(8,cajaY+e.clientY-inicioY))+"px";
+  });
+  function soltar(){moviendo=false;}
+  barra.addEventListener("pointerup",soltar);
+  barra.addEventListener("pointercancel",soltar);
+  window.addEventListener("resize",function(){
+    if(!modal.classList.contains("abierto")) return;
+    var r=caja.getBoundingClientRect();
+    caja.style.left=Math.min(Math.max(8,r.left),Math.max(8,window.innerWidth-caja.offsetWidth-8))+"px";
+    caja.style.top=Math.min(Math.max(8,r.top),Math.max(8,window.innerHeight-caja.offsetHeight-8))+"px";
+  });
+})();
