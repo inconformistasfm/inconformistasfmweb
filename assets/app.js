@@ -1627,6 +1627,7 @@ function mostrarMensajeEnviado(){
   window.abrirIvoox=function(url){
     if(!url) return false;
     if(/archive\.org\/embed\//i.test(url)){
+      frame.classList.remove("reproductor-ivoox","reproductor-spotify");
       frame.title="Reproductor de audio de Inconformistas FM";
       frame.removeAttribute("loading");
       frame.src=url;
@@ -1639,6 +1640,10 @@ function mostrarMensajeEnviado(){
     }
     /* Todos los audios añadidos a partir de ahora (iVoox y otros enlaces
        compatibles con abrirIvoox) utilizan la misma ventana flotante. */
+    var esIvoox=/player_ej_|(?:rf_|rf\/)/i.test(url);
+    frame.classList.toggle("reproductor-ivoox",esIvoox);
+    frame.classList.remove("reproductor-spotify");
+    if(esIvoox) frame.style.height="210px";
     var resultado=typeof abrirAnterior==="function"?abrirAnterior(url):false;
     if(modal.classList.contains("abierto")){
       modal.classList.add("cine-flotante");
@@ -1665,10 +1670,12 @@ function mostrarMensajeEnviado(){
     var limpio=url.split(/[?#]/)[0].replace(/\/$/,"");
     var m=limpio.match(/open\.spotify\.com\/(episode|track|album|playlist|show|artist)\/([A-Za-z0-9]+)/i);
     if(m){
+      frame.classList.remove("reproductor-ivoox");
+      frame.classList.add("reproductor-spotify");
       frame.title="Reproductor Spotify · Inconformistas FM";
       frame.removeAttribute("loading");
       frame.src="https://open.spotify.com/embed/"+m[1]+"/"+m[2]+"?utm_source=generator";
-      frame.style.height="152px";
+      frame.style.height="210px";
       frame.style.width="100%";
       modal.classList.add("abierto","cine-flotante");
       modal.setAttribute("aria-hidden","false");
