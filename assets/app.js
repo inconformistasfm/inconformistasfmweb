@@ -1534,6 +1534,8 @@ function mostrarMensajeEnviado(){
   var ARCHIVE_PLAYER = "https://archive.org/embed/inconformistas-fm-21-11-2026-audio-homogeneizado";
   var TITULO_PROGRAMA = "Programa especial de cine";
   var agregado283 = false;
+  var VISTA_PREVIA = new URLSearchParams(window.location.search).get("previsualizar") === "21nov";
+  function fechaActivada(){ return VISTA_PREVIA || new Date()>=FECHA_CINE; }
 
   /* Reutiliza la ventana modal de audio existente, pero carga el reproductor
      embebido de Archive.org (no la página de detalles del archivo). */
@@ -1566,7 +1568,7 @@ function mostrarMensajeEnviado(){
      reproductor Archive.org en la misma ventana modal, sin abrir otra página. */
   document.addEventListener("click",function(ev){
     var boton=ev.target && ev.target.closest ? ev.target.closest('[data-boton-principal="1"]') : null;
-    if(!boton || new Date()<FECHA_CINE) return;
+    if(!boton || !fechaActivada()) return;
     ev.preventDefault();
     ev.stopImmediatePropagation();
     window.abrirIvoox(ARCHIVE_PLAYER);
