@@ -1561,7 +1561,7 @@ function mostrarMensajeEnviado(){
   function actualizarBotonNoticia(){
     var boton=document.querySelector('[data-boton-principal="1"]');
     if(!boton) return;
-    boton.textContent = new Date()>=FECHA_CINE ? "▶ Escuchar" : "▶ Escuchar en directo";
+    boton.textContent = fechaActivada() ? "▶ Escuchar" : "▶ Escuchar en directo";
   }
 
   /* Captura el clic antes del manejador antiguo: tras las 20:30 abre el
@@ -1575,7 +1575,7 @@ function mostrarMensajeEnviado(){
   },true);
 
   function agregarPrograma283(){
-    if(new Date()<FECHA_CINE || agregado283 || !Array.isArray(window.P)) return;
+    if(!fechaActivada() || agregado283 || !Array.isArray(window.P)) return;
     if(!window.P.some(function(p){return Number(p[0])===283;})){
       window.P.unshift([283,TITULO_PROGRAMA,ARCHIVE_PLAYER,null,null,null]);
     }
