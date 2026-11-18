@@ -8,6 +8,8 @@ var SPOTIFY="https://open.spotify.com/show/033ZIDvFkeMDc9u050J6yr";
    No hace falta modificar este HTML al añadir más archivos. */
 var CANCIONES=Array.from({length:50},function(_,i){return "audio/cancion"+(i+1)+".mp3";});
 var GALERIA=[];
+var GALERIA_CARGADA=false;
+var RECURSOS_INICIADOS=false;
 var RECURSOS_CARGADOS=false;
 var MAX_RECURSOS=50;
 
@@ -858,8 +860,13 @@ function descubrirGaleria(){
     .catch(porManifiesto)
     .catch(function(){return null;})
     .then(function(encontradas){
-      if(encontradas){GALERIA=encontradas;comprobarRecursos();}
-      else descubrirGaleriaClasica();
+      if(encontradas){
+        GALERIA=encontradas;
+        GALERIA_CARGADA=true;
+        comprobarRecursos();
+      } else {
+        descubrirGaleriaClasica();
+      }
     });
 }
 
@@ -879,7 +886,11 @@ function descubrirGaleriaClasica(){
     })(i);
   }
   function finalizar(){
-    if(pendientes<=0){GALERIA=encontradas;comprobarRecursos();}
+    if(pendientes<=0 && !GALERIA_CARGADA){
+      GALERIA=encontradas;
+      GALERIA_CARGADA=true;
+      comprobarRecursos();
+    }
   }
 }
 
@@ -891,17 +902,17 @@ function descubrirAudio(){
 }
 
 function comprobarRecursos(){
-  if(GALERIA.length || CANCIONES.length || !RECURSOS_CARGADOS){
-    if(!RECURSOS_CARGADOS){
-      RECURSOS_CARGADOS=true;
-      document.dispatchEvent(new Event("recursosListos"));
-    }
+  /* Esperar a que termine la lectura de fotos.json antes de dibujar el carrusel. */
+  if(GALERIA_CARGADA && !RECURSOS_CARGADOS){
+    RECURSOS_CARGADOS=true;
+    document.dispatchEvent(new Event("recursosListos"));
   }
 }
 
 function cargarRecursos(){
   /* Evita repetir el descubrimiento al navegar entre secciones. */
-  if(RECURSOS_CARGADOS) return;
+  if(RECURSOS_INICIADOS) return;
+  RECURSOS_INICIADOS=true;
   descubrirGaleria();
   descubrirAudio();
 }
