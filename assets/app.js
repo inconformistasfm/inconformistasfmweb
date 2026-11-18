@@ -1526,3 +1526,73 @@ function mostrarMensajeEnviado(){
   document.body.appendChild(v);setTimeout(cerrar,8000);
   var bt=v.querySelector("button");if(bt)bt.focus();
 }
+
+
+/* Reproductor Archive.org para el especial de cine (21/11/2026, 20:30 hora peninsular). */
+(function(){
+  var FECHA_CINE = new Date("2026-11-21T20:30:00+01:00");
+  var ARCHIVE_PLAYER = "https://archive.org/embed/inconformistas-fm-21-11-2026-audio-homogeneizado";
+  var TITULO_PROGRAMA = "Programa especial de cine · 21/11/2026";
+  var agregado283 = false;
+
+  /* Reutiliza la ventana modal de audio existente, pero carga el reproductor
+     embebido de Archive.org (no la página de detalles del archivo). */
+  var abrirOriginal = window.abrirIvoox;
+  window.abrirIvoox = function(url){
+    if(url && /^https?:\/\/archive\.org\/embed\//i.test(url)){
+      var modal=document.getElementById("ivooxModal");
+      var player=document.getElementById("ivooxPlayer");
+      if(!modal || !player) return false;
+      player.setAttribute("title","Reproductor de audio del programa especial de cine");
+      player.style.width="100%";
+      player.style.height="60px";
+      player.style.border="0";
+      player.src=ARCHIVE_PLAYER;
+      modal.classList.add("abierto");
+      modal.setAttribute("aria-hidden","false");
+      document.body.style.overflow="hidden";
+      return false;
+    }
+    return typeof abrirOriginal==="function" ? abrirOriginal(url) : false;
+  };
+
+  function actualizarBotonNoticia(){
+    var boton=document.querySelector('[data-boton-principal="1"]');
+    if(!boton) return;
+    boton.textContent = new Date()>=FECHA_CINE ? "▶ Escuchar" : "▶ Escuchar en directo";
+  }
+
+  /* Captura el clic antes del manejador antiguo: tras las 20:30 abre el
+     reproductor Archive.org en la misma ventana modal, sin abrir otra página. */
+  document.addEventListener("click",function(ev){
+    var boton=ev.target && ev.target.closest ? ev.target.closest('[data-boton-principal="1"]') : null;
+    if(!boton || new Date()<FECHA_CINE) return;
+    ev.preventDefault();
+    ev.stopImmediatePropagation();
+    window.abrirIvoox(ARCHIVE_PLAYER);
+  },true);
+
+  function agregarPrograma283(){
+    if(new Date()<FECHA_CINE || agregado283 || !Array.isArray(window.P)) return;
+    if(!window.P.some(function(p){return Number(p[0])===283;})){
+      window.P.unshift([283,TITULO_PROGRAMA,ARCHIVE_PLAYER,null,null,null]);
+    }
+    agregado283=true;
+    if(typeof window.pintarProgramas==="function"){
+      var q=document.getElementById("q");
+      window.pintarProgramas(q?q.value:"");
+    }
+    var cifra=document.querySelector(".cifras div b");
+    if(cifra) cifra.textContent=String(window.P.length);
+  }
+
+  function ejecutar(){
+    actualizarBotonNoticia();
+    agregarPrograma283();
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",ejecutar);
+  else ejecutar();
+  window.addEventListener("load",ejecutar);
+  window.addEventListener("hashchange",function(){setTimeout(ejecutar,250);});
+  window.setInterval(ejecutar,1000);
+})();
