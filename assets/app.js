@@ -1604,7 +1604,7 @@ function mostrarMensajeEnviado(){
    Se mantiene fuera de #main, por lo que no se desmonta al navegar por la SPA. */
 (function(){
   var ARCHIVE_URL="https://archive.org/embed/inconformistas-fm-21-11-2026-audio-homogeneizado";
-  var TITULO="Inconformistas FM · Especial de cine";
+  var TITULO="Reproductor Inconformistas FM";
   var modal=document.getElementById("ivooxModal");
   var caja=modal&&modal.querySelector(".ivoox-caja");
   var frame=document.getElementById("ivooxPlayer");
@@ -1612,7 +1612,7 @@ function mostrarMensajeEnviado(){
 
   modal.classList.add("cine-flotante");
   caja.classList.add("cine-flotante-caja");
-  caja.setAttribute("aria-label","Reproductor del programa especial de cine");
+  caja.setAttribute("aria-label","Reproductor flotante de Inconformistas FM");
 
   var barra=caja.querySelector(".cine-arrastre");
   if(!barra){
@@ -1625,10 +1625,11 @@ function mostrarMensajeEnviado(){
 
   var abrirAnterior=window.abrirIvoox;
   window.abrirIvoox=function(url){
-    if(url && /archive\.org\/embed\//i.test(url)){
-      frame.title="Reproductor de audio del programa especial de cine";
+    if(!url) return false;
+    if(/archive\.org\/embed\//i.test(url)){
+      frame.title="Reproductor de audio de Inconformistas FM";
       frame.removeAttribute("loading");
-      frame.src=ARCHIVE_URL;
+      frame.src=url;
       frame.style.height="96px";
       frame.style.width="100%";
       modal.classList.add("abierto","cine-flotante");
@@ -1636,7 +1637,16 @@ function mostrarMensajeEnviado(){
       document.body.style.overflow="";
       return false;
     }
-    return typeof abrirAnterior==="function"?abrirAnterior(url):false;
+    /* Todos los audios añadidos a partir de ahora (iVoox y otros enlaces
+       compatibles con abrirIvoox) utilizan la misma ventana flotante. */
+    var resultado=typeof abrirAnterior==="function"?abrirAnterior(url):false;
+    if(modal.classList.contains("abierto")){
+      modal.classList.add("cine-flotante");
+      modal.setAttribute("aria-hidden","false");
+      document.body.style.overflow="";
+      frame.title="Reproductor de audio de Inconformistas FM";
+    }
+    return resultado;
   };
 
   /* El fondo no cierra el reproductor: solo la X lo hace. */
