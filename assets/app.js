@@ -1233,8 +1233,6 @@ pintar();
     if(!h || !img) return;
     if(h.textContent.trim()!==TITULO) h.textContent=TITULO;
     if(img.getAttribute('src')!==FOTO){img.src=FOTO; img.alt='Cartel del programa especial de cine: Los Gremlins, Eduardo Manostijeras y La jungla de cristal';}
-    /* La imagen principal es candidata a LCP: priorizar su descarga desde el primer render. */
-    img.fetchPriority="high"; img.loading="eager"; img.decoding="async";
     img.style.cssText='display:block;width:100%;max-width:130px;height:auto;object-fit:contain;border:0;border-radius:0';
     var texto=h.parentElement;
     var TEXTO=(new Date()>=HOY_TINAISA)?PARRAFOS_HOY:PARRAFOS;
