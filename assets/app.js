@@ -532,12 +532,26 @@ setTimeout(function(){
 }, Math.max(0, new Date("2026-10-17T20:30:00").getTime()-Date.now()));
 
 /* ---------- dial ---------- */
+var EMAILJS_PROMESA=null;
+function cargarEmailJS(){
+  if(window.emailjs) return Promise.resolve();
+  if(EMAILJS_PROMESA) return EMAILJS_PROMESA;
+  EMAILJS_PROMESA=new Promise(function(resolve,reject){
+    var s=document.createElement("script");
+    s.src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+    s.async=true;
+    s.onload=resolve;
+    s.onerror=function(){EMAILJS_PROMESA=null;reject(new Error("No se pudo cargar el servicio de correo"));};
+    document.head.appendChild(s);
+  });
+  return EMAILJS_PROMESA;
+}
+
 function montarFormulario(){
   var b=document.getElementById("fenviar");
   if(!b) return;
   var form=b.closest(".form");
   if(!form) return;
-  emailjs.init({publicKey:"lCm5mkNthLNbSYUUw"});
   b.addEventListener("click",function(){
     var n=document.getElementById("fnombre").value.trim(),
         e=document.getElementById("femail").value.trim(),
@@ -551,7 +565,10 @@ function montarFormulario(){
     aviso.textContent="Enviando mensaje…";
     b.disabled=true;
     var params={name:n||"No indicado",email:e,title:asunto,message:m,time:new Date().toLocaleString("es-ES")};
-    emailjs.send("service_th709xi","template_ctrkbfo",params,{publicKey:"lCm5mkNthLNbSYUUw"})
+    cargarEmailJS().then(function(){
+      emailjs.init({publicKey:"lCm5mkNthLNbSYUUw"});
+      return emailjs.send("service_th709xi","template_ctrkbfo",params,{publicKey:"lCm5mkNthLNbSYUUw"});
+    })
       .then(function(){
         aviso.innerHTML="<b>Mensaje enviado correctamente.</b> Gracias por escribirnos.";mostrarMensajeEnviado();
         document.getElementById("fnombre").value="";
