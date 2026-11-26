@@ -1247,7 +1247,7 @@ pintar();
     '🕢 Hoy, a las 19:30 h<br>📻 Radio Villalba 107.4 FM<br>🌐 inconformistasfm.es',
     'Porque hay poemas que se leen, otros que se cantan… y algunos que se quedan para siempre.'
   ];
-  var ESTILO_P = 'margin:0 0 8px;color:var(--suave);line-height:1.45';
+  var ESTILO_P = 'margin:0 0 8px;color:var(--suave);font-size:13px;line-height:1.45';
   function aplicar(){
     var principal=document.querySelector('.anuncio-rock');
     if(!principal) return;
