@@ -19,6 +19,7 @@
    - audio    : solo programas antiguos de 2010 (no hace falta tocarlo).
    ===================================================================== */
 window.PROGRAMAS=[
+{"n":284,"titulo":"Canciones que fueron poemas","ivoox":"https://www.ivoox.com/player_ej_184444699_6_1.html?c1=cb2650","desde":"2026-11-28T20:30:00+01:00"},
 {"n":282,"titulo":"Entrevista a Tinaisa 14/11/2026","ivoox":"https://www.ivoox.com/player_ej_183749601_6_1.html?c1=cb2650","desde":"2026-11-14T20:30:00+01:00"},
 {"n":281,"titulo":"ENTREVISTA A DE ARTE FLAMENCO","ivoox":"https://www.ivoox.com/player_ej_183380889_6_1.html?c1=cb2650","desde":"2026-11-07T20:30:00+01:00"},
 {"n":280,"titulo":"Especial Halloween","ivoox":"https://www.ivoox.com/player_ej_182802536_6_1.html?c1=cb2650","desde":"2026-10-31T19:30:00+01:00"},

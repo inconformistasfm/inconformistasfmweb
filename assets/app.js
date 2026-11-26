@@ -1195,11 +1195,11 @@ pintar();
       var a=document.createElement('a'); a.href=enlace; a.textContent='Escuchar'; a.setAttribute('onclick','return abrirIvoox(this.href)'); a.style.cssText='display:inline-block;color:#fff;font-weight:700;font-size:11px;padding:8px 12px;border-radius:20px;background:var(--turquesa);text-decoration:none'; zona.appendChild(a); card.appendChild(zona);
       return card;
     }
-    var halloween=crear('halloween','Especial Halloween','PROGRAMA ESPECIAL','https://raw.githubusercontent.com/inconformistasfm/inconformistasfmweb/main/fotos-programas/280/watermarked_img_7616198293509931508.jpg','Cartel del Especial Halloween','Un programa especial con Gustavo Adolfo Bécquer, Don Juan Tenorio y una historia que pudo o no pasar.','https://www.ivoox.com/player_ej_182802536_6_1.html?c1=cb2650');
+    var cine=crear('cine','Programa especial de cine','PROGRAMA ESPECIAL','/img/especial-cine.jpg','Cartel del programa especial de cine: Los Gremlins, Eduardo Manostijeras y La jungla de cristal','¿Quién dijo que las pelis navideñas son todas iguales? En este programa de Inconformistas FM, tras nuestra visita con Tinaisa, nos ponemos las gafas de la nostalgia para rescatar esas películas que ambientan las fiestas de una forma muy... particular.','https://archive.org/embed/inconformistas-fm-21-11-2026-audio-homogeneizado');
     var tinaisa=crear('tinaisa','Entrevista a Tinaisa','ENTREVISTA','/img/foto-portada.jpg','Portada del sencillo «Baby Boo» de Tinaisa','La artista Tinaisa nos presentó «Baby Boo», su recién estrenado sencillo: un tema lleno de energía que fusiona afrobeat y afropop contemporáneo, con una producción de primer nivel a cargo de Dabruk.','https://www.ivoox.com/player_ej_183749601_6_1.html?c1=cb2650');
     var flamenco=window.FOTO_DE_ARTE_FLAMENCO ? crear('flamenco','Entrevista a De Arte Flamenco','ENTREVISTA',window.FOTO_DE_ARTE_FLAMENCO,'Cartel de la entrevista a De Arte Flamenco','El duende, el compás y el sentimiento de la música flamenca llegaron a nuestros micrófonos de la mano de De Arte Flamenco, que además nos sorprendió con alguno de sus temas en directo.','https://www.ivoox.com/player_ej_183380889_6_1.html?c1=cb2650') : null;
     var anterior=null;
-    [tinaisa,flamenco,halloween].forEach(function(card){
+    [cine,tinaisa,flamenco].forEach(function(card){
       if(!card) return;
       var ref=anterior ? anterior.nextSibling : fila.firstChild;
       if(card!==ref) fila.insertBefore(card,ref);
@@ -1213,29 +1213,53 @@ pintar();
   setInterval(ordenarUltimos,1500);
 })();
 ;
-/* Portada estable: fija la noticia principal (posición 1): Programa especial de cine, con su botón de escucha en directo. */
+/* Portada estable: fija la noticia principal (posición 1): Poemas que fueron canciones, con su botón de escucha en directo. */
 (function(){
   window.FOTO_DE_ARTE_FLAMENCO = "/img/de-arte-flamenco.jpg";
-  var FOTO = "/img/especial-cine.jpg";
-  var TITULO = "PROGRAMA ESPECIAL DE CINE";
+  var FOTO = "/img/poemas-que-fueron-canciones.jpg";
+  var TITULO = "ESTE SÁBADO EN INCONFORMISTAS FM: POEMAS QUE FUERON CANCIONES 🎶";
+  /* Tres momentos: antes del 28/11/2026 («Este sábado»), el día 28 hasta las 20:30 («Hoy») y desde las 20:30 («Ya puedes escuchar»). */
+  var INICIO_HOY_POEMAS = new Date("2026-11-28T00:00:00+01:00");
+  var FIN_EMISION_POEMAS = new Date("2026-11-28T20:30:00+01:00");
+  var TITULO_HOY = "HOY EN INCONFORMISTAS FM: POEMAS QUE FUERON CANCIONES 🎶";
+  var TITULO_YA = "YA PUEDES ESCUCHAR: POEMAS QUE FUERON CANCIONES 🎶";
+  var PARRAFOS_YA = [
+    'Hay poemas que se leen, otros que se cantan… y algunos que se quedan para siempre.',
+    'Ya puedes escuchar el programa completo: un viaje por la poesía que se convirtió en música, con las palabras y las voces de Miguel Hernández, Federico García Lorca, Antonio Machado y Serrat, de la mano de Paco Ibáñez y Enrique Morente.',
+    'Incluye un poema inédito de Juanma Hontoria, palabras que todavía no habían encontrado su lugar en ningún libro y que ya tienen su espacio en las ondas.',
+    'Dale al play y déjate llevar por la poesía, la música, los recuerdos y las emociones.'
+  ];
   var PARRAFOS = [
-    '¿Quién dijo que las pelis navideñas son todas iguales? En este programa de Inconformistas FM, tras nuestra visita con Tinaisa, nos ponemos las gafas de la nostalgia para rescatar esas películas que ambientan las fiestas de una forma muy... particular.',
-    'Nos adentramos en los secretos de rodaje, anécdotas imperdibles y bandas sonoras legendarias de títulos que van desde el terror más puro hasta la comedia negra y la animación de culto. ¡Dale al play y descubre por qué el invierno cinematográfico da para mucho más que villancicos!'
+    '¿Sabías que detrás de muchas canciones inolvidables hay un poema?',
+    'Este sábado viajamos por la poesía que se convirtió en música, recorriendo las palabras y las voces de grandes figuras como Miguel Hernández, Federico García Lorca, Antonio Machado y Serrat, de la mano de artistas como Paco Ibáñez y Enrique Morente.',
+    'Y tendremos algo muy especial: un poema inédito de Juanma Hontoria. Palabras que todavía no han encontrado su lugar en ningún libro, pero que tendrán su espacio en las ondas.',
+    'Una cita con la poesía, la música, los recuerdos y las emociones.',
+    '📅 Sábado 28 de noviembre<br>🕢 19:30 h<br>📻 Radio Villalba 107.4 FM<br>🌐 inconformistasfm.es',
+    'Porque hay poemas que se leen, otros que se cantan… y algunos que se quedan para siempre.'
   ];
   /* El sábado 14/11/2026 (desde las 00:00, hora peninsular) la noticia pasa a decir «Hoy». */
   var HOY_TINAISA = new Date("2026-11-14T00:00:00+01:00");
-  var PARRAFOS_HOY = PARRAFOS; /* sin variante «Hoy» por ahora */
+  var PARRAFOS_HOY = [
+    '¿Sabías que detrás de muchas canciones inolvidables hay un poema?',
+    'Hoy viajamos por la poesía que se convirtió en música, recorriendo las palabras y las voces de grandes figuras como Miguel Hernández, Federico García Lorca, Antonio Machado y Serrat, de la mano de artistas como Paco Ibáñez y Enrique Morente.',
+    'Y tendremos algo muy especial: un poema inédito de Juanma Hontoria. Palabras que todavía no han encontrado su lugar en ningún libro, pero que tendrán su espacio en las ondas.',
+    'Una cita con la poesía, la música, los recuerdos y las emociones.',
+    '🕢 Hoy, a las 19:30 h<br>📻 Radio Villalba 107.4 FM<br>🌐 inconformistasfm.es',
+    'Porque hay poemas que se leen, otros que se cantan… y algunos que se quedan para siempre.'
+  ];
   var ESTILO_P = 'margin:0 0 8px;color:var(--suave);line-height:1.45';
   function aplicar(){
     var principal=document.querySelector('.anuncio-rock');
     if(!principal) return;
     var h=principal.querySelector('h3'), img=principal.querySelector('img');
     if(!h || !img) return;
-    if(h.textContent.trim()!==TITULO) h.textContent=TITULO;
-    if(img.getAttribute('src')!==FOTO){img.src=FOTO; img.alt='Cartel del programa especial de cine: Los Gremlins, Eduardo Manostijeras y La jungla de cristal';}
+    var ya=new Date(), enHoy=ya>=INICIO_HOY_POEMAS, emitido=ya>=FIN_EMISION_POEMAS;
+    var TITULO_ACTUAL=emitido?TITULO_YA:(enHoy?TITULO_HOY:TITULO);
+    if(h.textContent.trim()!==TITULO_ACTUAL) h.textContent=TITULO_ACTUAL;
+    if(img.getAttribute('src')!==FOTO){img.src=FOTO; img.alt='Cartel del programa Poemas que fueron canciones, sábado 28 de noviembre a las 19:30 en Radio Villalba 107.4 FM';}
     img.style.cssText='display:block;width:100%;max-width:130px;height:auto;object-fit:contain;border:0;border-radius:0';
     var texto=h.parentElement;
-    var TEXTO=(new Date()>=HOY_TINAISA)?PARRAFOS_HOY:PARRAFOS;
+    var TEXTO=emitido?PARRAFOS_YA:(enHoy?PARRAFOS_HOY:PARRAFOS);
     var ps=texto.querySelectorAll('p');
     while(ps.length<TEXTO.length){var p=document.createElement('p'); texto.appendChild(p); ps=texto.querySelectorAll('p');}
     for(var i=0;i<TEXTO.length;i++){
@@ -1423,10 +1447,10 @@ pintar();
   var IVOOX_TINAISA = "https://www.ivoox.com/player_ej_183749601_6_1.html?c1=cb2650";
   var TITULO_TINAISA = "Entrevista a Tinaisa 14/11/2026";
   var agregado282 = false;
-  /* Noticia principal actual (programa especial de cine, sábado 21/11/2026 a las 19:30): el botón se queda en «Escuchar en directo».
-     Cuando haya reproductor de iVoox, poner aquí la hora de fin del programa y el enlace para que pase solo a «Escuchar». */
-  var EMISION_PRINCIPAL = null;
-  var IVOOX_PRINCIPAL = null;
+  /* Noticia principal actual (Poemas que fueron canciones, sábado 28/11/2026 a las 19:30): el botón es «Escuchar en directo»
+     y a las 20:30 pasa solo a «Escuchar ahora», que abre el reproductor de iVoox. */
+  var EMISION_PRINCIPAL = new Date("2026-11-28T20:30:00+01:00");
+  var IVOOX_PRINCIPAL = "https://www.ivoox.com/player_ej_184444699_6_1.html?c1=cb2650";
   function principalEmitido(){ return !!EMISION_PRINCIPAL && !!IVOOX_PRINCIPAL && new Date()>=EMISION_PRINCIPAL; }
 
   function botonNoticia(contenedor){
@@ -1435,7 +1459,7 @@ pintar();
     a.setAttribute('data-boton-principal','1');
     a.className='btn rosa';
     a.href='#';
-    a.textContent=principalEmitido()?'▶ Escuchar':'▶ Escuchar en directo';
+    a.textContent=principalEmitido()?'▶ Escuchar ahora':'▶ Escuchar en directo';
     a.style.cssText='display:inline-flex;margin-top:12px;align-items:center;justify-content:center';
     a.addEventListener('click',function(ev){
       ev.preventDefault();
@@ -1448,11 +1472,11 @@ pintar();
     contenedor.appendChild(a);
   }
 
-  /* A las 20:30 del 14/11/2026 el botón ya existente cambia solo, sin recargar la página. */
+  /* A las 20:30 del 28/11/2026 el botón ya existente cambia solo, sin recargar la página. */
   function ajustarBotonNoticia(contenedor){
     var a=contenedor.querySelector('[data-boton-principal="1"]');
     if(!a) return;
-    var texto=principalEmitido()?'▶ Escuchar':'▶ Escuchar en directo';
+    var texto=principalEmitido()?'▶ Escuchar ahora':'▶ Escuchar en directo';
     if(a.textContent!==texto) a.textContent=texto;
   }
 
@@ -1575,22 +1599,6 @@ function mostrarMensajeEnviado(){
     return typeof abrirOriginal==="function" ? abrirOriginal(url) : false;
   };
 
-  function actualizarBotonNoticia(){
-    var boton=document.querySelector('[data-boton-principal="1"]');
-    if(!boton) return;
-    boton.textContent = fechaActivada() ? "▶ Escuchar" : "▶ Escuchar en directo";
-  }
-
-  /* Captura el clic antes del manejador antiguo: tras las 20:30 abre el
-     reproductor Archive.org en la misma ventana modal, sin abrir otra página. */
-  document.addEventListener("click",function(ev){
-    var boton=ev.target && ev.target.closest ? ev.target.closest('[data-boton-principal="1"]') : null;
-    if(!boton || !fechaActivada()) return;
-    ev.preventDefault();
-    ev.stopImmediatePropagation();
-    window.abrirIvoox(ARCHIVE_PLAYER);
-  },true);
-
   function agregarPrograma283(){
     if(!fechaActivada() || agregado283 || !Array.isArray(window.P)) return;
     if(!window.P.some(function(p){return Number(p[0])===283;})){
@@ -1606,7 +1614,6 @@ function mostrarMensajeEnviado(){
   }
 
   function ejecutar(){
-    actualizarBotonNoticia();
     agregarPrograma283();
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",ejecutar);
